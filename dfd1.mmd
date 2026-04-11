@@ -1,0 +1,42 @@
+flowchart TD
+    %% Entities
+    C[Customer]
+    A[Admin]
+
+    %% Processes
+    P1((1.0\nAuth Management))
+    P2((2.0\nBrowse Catalog))
+    P3((3.0\nCart Management\nSession))
+    P4((4.0\nOrder Processing))
+    P5((5.0\nInventory Mgt))
+
+    %% Data Stores
+    D1[(D1: Users DB)]
+    D2[(D2: Books & Categories DB)]
+    D3[(D3: Orders DB)]
+
+    %% Customer Flows
+    C -->|Login / Register Details| P1
+    P1 -->|Auth Session / Status| C
+    P1 <-->|Verify / Store User Data| D1
+    
+    C -->|Search Query / Filter| P2
+    P2 -->|Book List & Details| C
+    P2 <-->|Fetch Books / Categories| D2
+    
+    C -->|Add / Remove Books| P3
+    P3 -->|Cart Totals & Details| C
+    P2 -->|Selected Book Info| P3
+    
+    C -->|Checkout & Payment Details| P4
+    P4 -->|Invoice / Order Confirmation| C
+    P3 -->|Cart Data| P4
+    P4 -->|Create Order & Order Items| D3
+    P4 -->|Deduct Stock| D2
+
+    %% Admin Flows
+    A -->|Login Credentials| P1
+    A -->|Add / Edit / Delete Books| P5
+    P5 <-->|Update Stock & details| D2
+    A -->|Change Order Status| P4
+    P4 -->|View All Orders| A

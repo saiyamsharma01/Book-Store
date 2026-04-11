@@ -1,0 +1,72 @@
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+        <!-- Brand -->
+        <a class="navbar-brand d-flex align-items-center"
+           href="/">
+            <i class="bi bi-book-half text-primary fs-3 me-2"></i>
+            <span class="fw-bold fs-4">KBooks</span>
+        </a>
+
+        <!-- Toggler -->
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Nav Links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+                <li class="nav-item">
+                    <a class="nav-link <%= activePage === 'home' ? 'active' : '' %>" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <%= activePage === 'books' ? 'active' : '' %>" href="/books">Books</a>
+                </li>
+
+                <% if (session && session.user) { %>
+                    <% if (session.user.role === 'admin') { %>
+                        <li class="nav-item">
+                            <a class="nav-link fw-bold text-primary" href="/admin">Dashboard</a>
+                        </li>
+                    <% } else { %>
+                        <li class="nav-item">
+                            <a class="nav-link position-relative" href="/cart">
+                                <i class="bi bi-bag"></i>
+                                <% if (session.cartCount > 0) { %>
+                                    <span class="position-absolute translate-middle badge rounded-pill bg-primary" style="font-size: 0.6rem; top: 10px; right: -5px;">
+                                        <%= session.cartCount %>
+                                    </span>
+                                <% } %>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/wishlist"><i class="bi bi-heart"></i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/auth/profile">Profile</a>
+                        </li>
+                    <% } %>
+                    <li class="nav-item">
+                        <a class="btn btn-sm btn-outline-danger ms-lg-3 rounded-pill" href="/auth/logout">Logout</a>
+                    </li>
+                <% } else { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/auth/login">Login</a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-primary rounded-pill px-4" href="/auth/signup">Join Now</a>
+                    </li>
+                <% } %>
+            </ul>
+
+            <!-- Search -->
+            <form class="ms-lg-4 mt-3 mt-lg-0" action="/search" method="GET">
+                <div class="input-group bg-light rounded-pill px-3 py-1">
+                    <input type="text" name="q" class="form-control border-0 bg-transparent shadow-none" placeholder="Search books..." style="width: 150px;">
+                    <button class="btn btn-link link-secondary border-0 p-0" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</nav>

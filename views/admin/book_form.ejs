@@ -1,0 +1,121 @@
+<h2 class="mt-4 mb-3 text-secondary fw-bold d-flex align-items-center">
+    <i class="bi bi-book me-2 text-primary"></i> <%= book ? 'Edit Book' : 'Add New Book' %>
+</h2>
+
+<!-- Flash Messages -->
+<% if (success && success.length > 0) { %>
+    <div class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm d-flex align-items-center" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i> <%= success[0] %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+<% } %>
+<% if (error && error.length > 0) { %>
+    <div class="alert alert-danger alert-dismissible fade show rounded-4 shadow-sm d-flex align-items-center" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i> <%= error[0] %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+<% } %>
+
+<form method="post" enctype="multipart/form-data"
+      action="<%= book ? '/admin/books/' + book.id : '/admin/books' %>"
+      class="card border-0 rounded-4 shadow-sm classy-card p-4 fade-in-card">
+
+    <% if (book && book.image) { %>
+        <input type="hidden" name="current_image" value="<%= book.image %>" />
+    <% } %>
+
+    <!-- Title -->
+    <div class="mb-3">
+        <label class="form-label fw-semibold"><i class="bi bi-type me-1 text-primary"></i> Title</label>
+        <input name="title" maxlength="150" class="form-control rounded-pill classy-input" value="<%= book?.title || '' %>" required>
+    </div>
+
+    <!-- Author -->
+    <div class="mb-3">
+        <label class="form-label fw-semibold"><i class="bi bi-person me-1 text-primary"></i> Author</label>
+        <input name="author" maxlength="100" class="form-control rounded-pill classy-input" value="<%= book?.author || '' %>" required>
+    </div>
+
+    <!-- Description -->
+    <div class="mb-3">
+        <label class="form-label fw-semibold"><i class="bi bi-pencil-square me-1 text-primary"></i> Description</label>
+        <textarea name="description" id="description" maxlength="500" class="form-control classy-input" rows="4" required><%= book?.description || '' %></textarea>
+        <small id="descCounter" class="text-muted">0 / 500</small>
+    </div>
+
+    <!-- Price -->
+    <div class="mb-3">
+        <label class="form-label fw-semibold"><i class="bi bi-currency-rupee me-1 text-primary"></i> Price (₹)</label>
+        <input type="number" step="0.01" min="0" name="price" class="form-control rounded-pill classy-input" value="<%= book?.price || '' %>" required>
+    </div>
+
+    <!-- Stock -->
+    <div class="mb-3">
+        <label class="form-label fw-semibold"><i class="bi bi-box-seam me-1 text-primary"></i> Stock</label>
+        <input type="number" min="0" name="stock" class="form-control rounded-pill classy-input" value="<%= book?.stock || 0 %>" required>
+    </div>
+
+    <!-- Category -->
+    <div class="mb-3">
+        <label class="form-label fw-semibold"><i class="bi bi-tags me-1 text-primary"></i> Category</label>
+        <select name="category_id" class="form-select classy-input" required>
+            <option value="">Select a category</option>
+            <% categories.forEach(c => { %>
+                <option value="<%= c.id %>" <%= book?.category_id === c.id ? 'selected' : '' %>><%= c.name %></option>
+            <% }) %>
+        </select>
+    </div>
+
+    <!-- Cover Image -->
+    <div class="mb-3">
+        <label class="form-label fw-semibold"><i class="bi bi-image me-1 text-primary"></i> Cover Image</label>
+        <input type="file" name="image" id="coverInput" class="form-control classy-input" accept="image/*">
+        <div class="mt-3">
+            <% if (book?.image) { %>
+                <img id="coverPreview" src="<%= book.image %>" alt="Current Cover" class="img-thumbnail rounded shadow-sm" width="120">
+            <% } else { %>
+                <img id="coverPreview" src="" alt="Cover Preview" class="img-thumbnail rounded shadow-sm d-none" width="120">
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" class="btn btn-success w-100 rounded-pill classy-btn pulse-btn">
+        <i class="bi bi-check-circle me-2"></i> <%= book ? 'Update Book' : 'Create Book' %>
+    </button>
+</form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const coverInput = document.getElementById("coverInput");
+        const coverPreview = document.getElementById("coverPreview");
+        const descInput = document.getElementById("description");
+        const descCounter = document.getElementById("descCounter");
+
+        if (coverInput) {
+            coverInput.addEventListener("change", event => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+                        coverPreview.src = e.target.result;
+                        coverPreview.classList.remove("d-none");
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        if (descInput && descCounter) {
+            descCounter.textContent = `${descInput.value.length} / 500`;
+            descInput.addEventListener("input", () => {
+                descCounter.textContent = `${descInput.value.length} / 500`;
+            });
+        }
+
+        // Fade-in animation
+        document.querySelectorAll(".fade-in-card").forEach(card => {
+            card.classList.add("visible");
+        });
+    });
+</script>

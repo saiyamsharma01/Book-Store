@@ -1,0 +1,55 @@
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm fade-in-card"
+     style="background: linear-gradient(90deg, #d6d4e0, #928dab);">
+    <div class="container">
+        <!-- Brand -->
+        <a class="navbar-brand d-flex align-items-center" href="/admin">
+            <img src="/images/MY-BOOKS.png" alt="MYBooks Logo" height="40" class="me-2">
+            <span class="fw-bold color--dark">MY-Books Admin</span>
+        </a>
+
+        <!-- Toggler -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Nav Links -->
+        <div class="collapse navbar-collapse" id="adminNav">
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+                <li class="nav-item">
+                    <a class="nav-link fw-semibold <%= activePage === 'dashboard' ? 'active' : '' %>" href="/admin">
+                        <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link fw-semibold <%= activePage === 'orders' ? 'active' : '' %>" href="/admin/orders">
+                        <i class="bi bi-box-seam me-1"></i> Orders
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link fw-semibold <%= activePage === 'feedbacks' ? 'active' : '' %>" href="/admin/feedbacks">
+                        <i class="bi bi-chat-left-text me-1"></i> Feedbacks
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link fw-semibold text-danger <%= activePage === 'logout' ? 'active' : '' %>" href="/auth/logout">
+                        <i class="bi bi-box-arrow-right me-1"></i> Logout
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Modern Search Bar -->
+            <form class="d-flex ms-lg-3 mt-3 mt-lg-0" action="/admin/search" method="GET">
+                <div class="input-group rounded-pill overflow-hidden shadow-sm search-expand">
+                    <span class="input-group-text bg-light border-0">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input class="form-control border-0 search-input" type="search" name="q"
+                           placeholder="Search users/orders..." aria-label="Search">
+                </div>
+            </form>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,84 @@
+<!-- Hero Section -->
+<section class="hero-section text-center mb-5">
+    <div class="container py-5">
+        <h1 class="display-3 fw-bold mb-3 animate__animated animate__fadeInDown">Your Gateway to Knowledge</h1>
+        <p class="lead mb-4 animate__animated animate__fadeInUp">Discover thousands of books, from classics to latest bestsellers.</p>
+        <div class="d-flex justify-content-center gap-3 animate__animated animate__fadeInUp animate__delay-1s">
+            <a href="/books" class="btn btn-primary btn-lg rounded-pill px-5">Browse Collection</a>
+            <a href="/categories" class="btn btn-outline-light btn-lg rounded-pill px-5">Shop Categories</a>
+        </div>
+    </div>
+</section>
+
+<!-- Latest Books Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <h2 class="fw-bold mb-1">Latest Arrivals</h2>
+                <p class="text-muted">Fresh stories recently added to our library.</p>
+            </div>
+            <a href="/books" class="btn btn-link link-primary fw-bold text-decoration-none p-0">View All <i class="bi bi-arrow-right"></i></a>
+        </div>
+
+        <div class="row g-4">
+            <% books.slice(0, 6).forEach((b, index) => { %>
+                <div class="col-lg-2 col-md-4 col-sm-6 fade-in-card">
+                    <div class="card h-100 classy-card border-0 shadow-sm">
+                        <div class="position-relative overflow-hidden">
+                            <% if (b.image) { %>
+                                <img src="<%= b.image.startsWith('http') || b.image.startsWith('/uploads/books/') ? b.image : '/uploads/books/' + b.image %>"
+                                     class="card-img-top"
+                                     alt="<%= b.title %>"
+                                     style="height:240px; object-fit:cover;">
+                            <% } else { %>
+                                <img src="/images/default-book.png"
+                                     class="card-img-top"
+                                     alt="No cover"
+                                     style="height:240px; object-fit:cover;">
+                            <% } %>
+                            
+                            <div class="card-img-overlay d-flex align-items-start justify-content-end p-2">
+                                <span class="badge bg-white text-dark rounded-pill shadow-sm">₹<%= b.price %></span>
+                            </div>
+                        </div>
+
+                        <div class="card-body p-3 d-flex flex-column">
+                            <h6 class="card-title mb-1 text-truncate">
+                                <a href="/book/<%= b.id %>" class="text-decoration-none text-dark fw-bold">
+                                    <%= b.title %>
+                                </a>
+                            </h6>
+                            <p class="text-muted small mb-3">By <%= b.author %></p>
+                            
+                            <div class="mt-auto d-grid">
+                                <a href="/book/<%= b.id %>" class="btn btn-sm btn-outline-primary rounded-pill">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</section>
+
+<style>
+    .animate__delay-1s { animation-delay: 0.5s; }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const cards = document.querySelectorAll(".fade-in-card");
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add("visible");
+                    }, i * 100);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        cards.forEach(card => observer.observe(card));
+    });
+</script>

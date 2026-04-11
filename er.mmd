@@ -1,0 +1,45 @@
+erDiagram
+    users {
+        int id PK
+        string name
+        string email
+        string password
+        enum role "customer | admin"
+        timestamp created_at
+    }
+    categories {
+        int id PK
+        string name
+        string slug
+        timestamp created_at
+    }
+    books {
+        int id PK
+        string title
+        string author
+        string description
+        decimal price
+        int stock
+        string image
+        int category_id FK
+        timestamp created_at
+    }
+    orders {
+        int id PK
+        int user_id FK
+        decimal total
+        enum status "pending | paid | shipped | cancelled"
+        timestamp created_at
+    }
+    order_items {
+        int id PK
+        int order_id FK
+        int book_id FK
+        int quantity
+        decimal price
+    }
+
+    users ||--o{ orders : "places"
+    categories ||--o{ books : "contains"
+    orders ||--|{ order_items : "includes"
+    books ||--o{ order_items : "is_part_of"

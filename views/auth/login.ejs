@@ -1,0 +1,41 @@
+<div class="row justify-content-center py-5">
+    <div class="col-md-5">
+        <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="bg-primary p-5 text-center text-white">
+                <i class="bi bi-person-circle display-4 mb-3"></i>
+                <h2 class="fw-bold mb-0">Welcome Back</h2>
+                <p class="mb-0 opacity-75">Login to access your library</p>
+            </div>
+            <div class="card-body p-5">
+                <form action="/auth/login" method="POST">
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold text-muted">Email Address</label>
+                        <div class="input-group bg-light rounded-pill px-3 py-1">
+                            <span class="input-group-text bg-transparent border-0"><i class="bi bi-envelope text-primary"></i></span>
+                            <input type="email" name="email" class="form-control bg-transparent border-0 shadow-none" placeholder="name@example.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between">
+                            <label class="form-label fw-semibold text-muted">Password</label>
+                            <a href="/auth/forgot-password" class="small text-decoration-none">Forgot?</a>
+                        </div>
+                        <div class="input-group bg-light rounded-pill px-3 py-1">
+                            <span class="input-group-text bg-transparent border-0"><i class="bi bi-lock text-primary"></i></span>
+                            <input type="password" name="password" class="form-control bg-transparent border-0 shadow-none" placeholder="••••••••" required>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary rounded-pill py-3 fw-bold">Sign In</button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-5">
+                    <p class="text-muted mb-0">Don't have an account? <a href="/auth/signup" class="fw-bold text-decoration-none">Join KBooks</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

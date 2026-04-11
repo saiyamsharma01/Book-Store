@@ -1,0 +1,85 @@
+<div class="container my-5 classy-section">
+    <!-- Category Title -->
+    <h2 class="mb-4 text-secondary fw-bold border-bottom pb-2 d-flex align-items-center">
+        <i class="bi bi-tag me-2 text-primary"></i> <%= category.name %>
+    </h2>
+    <p class="text-muted"><%= category.description %></p>
+
+    <!-- Books in this category -->
+    <div class="row g-4"> <!-- ✅ added gutter spacing -->
+        <% if (books && books.length > 0) { %>
+            <% books.forEach(b => { %>
+                <div class="col-lg-2 col-md-3 col-sm-6 fade-in-card"> <!-- ✅ responsive columns -->
+                    <div class="card h-100 border-0 rounded-4 shadow-sm classy-card hover-zoom">
+                        <!-- Book image -->
+                        <a href="/book/<%= b.id %>">
+                            <img src="<%= b.image && (b.image.startsWith('http') || b.image.startsWith('/uploads/books/')) ? b.image : (b.image ? '/uploads/books/' + b.image : '/images/default-book.png') %>"
+                                 class="card-img-top rounded-top"
+                                 alt="<%= b.title %>"
+                                 style="height:160px; object-fit:cover;">
+                        </a>
+
+                        <div class="card-body d-flex flex-column p-3">
+                            <h6 class="card-title mb-1 text-truncate">
+                                <a href="/book/<%= b.id %>" class="text-decoration-none text-dark fw-semibold classy-link">
+                                    <%= b.title %>
+                                </a>
+                            </h6>
+                            <small class="text-muted">By <%= b.author %></small>
+                            <p class="fw-bold text-success mb-2">₹<%= b.price %></p>
+
+                            <!-- Action button -->
+                            <div class="mt-auto">
+                                <a href="/book/<%= b.id %>"
+                                   class="btn btn-sm btn-outline-dark rounded-pill px-3 classy-btn">
+                                    <i class="bi bi-eye me-1"></i> Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="col-12">
+                <div class="alert alert-info rounded-4 shadow-sm text-center">
+                    <i class="bi bi-info-circle me-2"></i> No books found in this category.
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+    <!-- Sidebar: Other categories -->
+    <h4 class="mt-5 mb-3 text-secondary fw-bold border-bottom pb-2">Browse Other Categories</h4>
+    <div class="row g-4"> <!-- ✅ added gutter spacing -->
+        <% categories.slice(0, 12).forEach(c => { %> <!-- ✅ limit to 12 for neatness -->
+        <div class="col-lg-2 col-md-3 col-sm-6 fade-in-card">
+            <a href="/category/<%= c.slug %>" class="text-decoration-none">
+                <div class="card h-100 text-center border-0 rounded-4 shadow-sm classy-card hover-lift p-3">
+                    <img src="<%= c.icon ? (c.icon.startsWith('http') ? c.icon : '/uploads/icons/' + c.icon) : '/icons/default.png' %>"
+                         alt="<%= c.name %> icon"
+                         style="height:60px; width:auto; object-fit:contain;"
+                         class="mx-auto d-block mb-2">
+                    <h6 class="fw-bold mb-1 text-dark text-truncate"><%= c.name %></h6>
+                    <span class="badge bg-secondary rounded-pill"><%= c.book_count %> books</span>
+                </div>
+            </a>
+        </div>
+        <% }) %>
+    </div>
+</div>
+
+<script>
+    // Fade-in animation
+    document.addEventListener("DOMContentLoaded", () => {
+        const cards = document.querySelectorAll(".fade-in-card");
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                    observer.unobserve(entry.target); // animate once
+                }
+            });
+        }, { threshold: 0.2 });
+        cards.forEach(card => observer.observe(card));
+    });
+</script>

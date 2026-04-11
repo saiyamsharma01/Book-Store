@@ -1,0 +1,96 @@
+<div class="container my-5 classy-section text-center">
+    <!-- Page Title -->
+    <h2 class="mb-4 text-secondary fw-bold border-bottom pb-2 d-flex align-items-center justify-content-center">
+        <i class="bi bi-credit-card me-2 text-primary"></i> Secure Online Payment
+    </h2>
+
+    <!-- Order Summary -->
+    <div class="card border-0 rounded-4 shadow-sm classy-card mb-4 fade-in-card">
+        <div class="card-body">
+            <h5 class="fw-bold mb-3">
+                <i class="bi bi-bag-check me-2 text-primary"></i> Order Summary
+            </h5>
+            <p class="mb-1">Total Amount: <span class="fw-bold text-success">₹<%= total %></span></p>
+            <p class="text-muted">You will be redirected to Razorpay’s secure payment gateway.</p>
+        </div>
+    </div>
+
+    <!-- Payment Button -->
+    <div class="text-center">
+        <button id="payBtn" class="btn btn-lg btn-primary rounded-pill classy-btn pulse-btn">
+            <i class="bi bi-lock-fill me-2"></i> Pay Securely with Razorpay
+        </button>
+        <p class="small text-muted mt-2">Click the button to proceed with secure payment.</p>
+    </div>
+</div>
+
+<!-- Razorpay Script -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const payBtn = document.getElementById("payBtn");
+
+        payBtn.addEventListener("click", async () => {
+            payBtn.disabled = true;
+            payBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i> Initializing...';
+
+            try {
+                // Step 1: Create Razorpay order via backend
+                const orderRes = await fetch("/payment/create-order", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ total: <%= total %>, address_id: <%= address_id %> })
+                });
+                const { success, order } = await orderRes.json();
+
+                if (!success) {
+                    alert("Failed to create Razorpay order. Please try again.");
+                    payBtn.disabled = false;
+                    payBtn.innerHTML = '<i class="bi bi-lock-fill me-2"></i> Pay Securely with Razorpay';
+                    return;
+                }
+
+                // Step 2: Open Razorpay checkout
+                const options = {
+                    key: "<%= process.env.RAZORPAY_KEY_ID %>",
+                    amount: order.amount,
+                    currency: order.currency,
+                    name: "MYBooks",
+                    description: "Book Purchase",
+                    order_id: order.id,
+                    handler: async function (response) {
+                        // Step 3: Verify payment via backend
+                        const verifyRes = await fetch("/payment/verify-payment", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_signature: response.razorpay_signature,
+                                address_id: <%= address_id %>
+                            })
+                        });
+
+                        const result = await verifyRes.json();
+                        if (result.success) {
+                            window.location.href = "/cart/order_success"; // ✅ correct route
+                        } else {
+                            alert("Oops! Something went wrong. Payment Failed.");
+                            payBtn.disabled = false;
+                            payBtn.innerHTML = '<i class="bi bi-lock-fill me-2"></i> Pay Securely with Razorpay';
+                        }
+                    },
+                    theme: { color: "#4CAF50" }
+                };
+
+                const rzp = new Razorpay(options);
+                rzp.open();
+            } catch (err) {
+                console.error("Payment error:", err);
+                alert("Payment initialization failed. Please try again.");
+                payBtn.disabled = false;
+                payBtn.innerHTML = '<i class="bi bi-lock-fill me-2"></i> Pay Securely with Razorpay';
+            }
+        });
+    });
+</script>

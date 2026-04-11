@@ -1,0 +1,5 @@
+flowchart TD
+    C[Customer] -->|Browse Books, Add to Cart, Place Order| SYS(Bookstore Management System)
+    SYS -->|Order Confirmation, Book Details| C
+    A[Admin] -->|Manage Books, Categories, Orders| SYS
+    SYS -->|Current Inventory, Order Status Details| A

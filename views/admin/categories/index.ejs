@@ -1,0 +1,80 @@
+<h2 class="mt-4 mb-3 text-secondary fw-bold d-flex align-items-center">
+    <i class="bi bi-tags-fill me-2 text-primary"></i> Manage Categories
+</h2>
+
+<!-- Flash Messages -->
+<% if (typeof success !== 'undefined' && success) { %>
+    <div class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm d-flex align-items-center" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i> <%= success %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+<% } %>
+
+<% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert-danger alert-dismissible fade show rounded-4 shadow-sm d-flex align-items-center" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i> <%= error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+<% } %>
+
+<div class="card border-0 rounded-4 shadow-sm classy-card fade-in-card">
+    <div class="card-body">
+        <% if (categories && categories.length > 0) { %>
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-hover align-middle classy-table">
+                    <thead class="table-dark">
+                    <tr>
+                        <th class="d-none d-md-table-cell">ID</th>
+                        <th>Name</th>
+                        <th>Icon</th>
+                        <th class="d-none d-md-table-cell">Created On</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% categories.forEach(c => { %>
+                        <tr>
+                            <td class="d-none d-md-table-cell"><%= c.id %></td>
+                            <td class="fw-semibold"><%= c.name %></td>
+                            <td>
+                                <% if (c.icon) { %>
+                                    <img src="<%= c.icon %>" alt="<%= c.name %> icon" width="30" height="30" class="rounded shadow-sm">
+                                <% } else { %>
+                                    <span class="badge bg-secondary rounded-pill">N/A</span>
+                                <% } %>
+                            </td>
+                            <td class="d-none d-md-table-cell"><%= new Date(c.created_at).toLocaleString() %></td>
+                            <td class="text-end">
+                                <!-- ✅ Flex container for aligned buttons -->
+                                <div class="d-flex justify-content-end flex-wrap gap-2">
+                                    <a href="/admin/categories/<%= c.id %>/edit" class="btn btn-sm btn-outline-warning rounded-pill classy-btn">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </a>
+                                    <form method="post" action="/admin/categories/<%= c.id %>/delete"
+                                          onsubmit="return confirm('Delete category <%= c.name %>?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill classy-btn">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        <% } else { %>
+            <div class="alert alert-info rounded-4 shadow-sm d-flex align-items-center">
+                <i class="bi bi-info-circle me-2"></i> No categories found.
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".fade-in-card").forEach(card => {
+            card.classList.add("visible");
+        });
+    });
+</script>

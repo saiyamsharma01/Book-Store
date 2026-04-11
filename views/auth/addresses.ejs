@@ -1,0 +1,83 @@
+<h2 class="mt-4 mb-3 text-secondary fw-bold d-flex align-items-center">
+    <i class="bi bi-geo-alt me-2 text-primary"></i> Saved Addresses
+</h2>
+
+<!-- Add Address Form -->
+<form method="post" action="/auth/profile/addresses/add"
+      class="card border-0 rounded-4 shadow-sm classy-card p-4 mb-4 fade-in-card">
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-text bg-light border-0"><i class="bi bi-tag"></i></span>
+                <input name="label" class="form-control rounded-pill classy-input" placeholder="Label (e.g. Home)" required>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="input-group">
+                <span class="input-group-text bg-light border-0"><i class="bi bi-house"></i></span>
+                <input name="line1" class="form-control rounded-pill classy-input" placeholder="Address Line" required>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-text bg-light border-0"><i class="bi bi-building"></i></span>
+                <input name="city" class="form-control rounded-pill classy-input" placeholder="City" required>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-text bg-light border-0"><i class="bi bi-map"></i></span>
+                <input name="state" class="form-control rounded-pill classy-input" placeholder="State" required>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-text bg-light border-0"><i class="bi bi-mailbox"></i></span>
+                <input name="zip" class="form-control rounded-pill classy-input" placeholder="ZIP" required>
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-primary mt-3 w-100 rounded-pill classy-btn pulse-btn">
+        <i class="bi bi-check-circle me-2"></i> Add Address
+    </button>
+</form>
+
+<!-- Saved Addresses -->
+<% if (addresses.length > 0) { %>
+    <% addresses.forEach(a => { %>
+        <div class="card mb-3 border-0 rounded-4 shadow-sm classy-card fade-in-card">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <span class="badge bg-secondary rounded-pill px-3 mb-2"><%= a.label %></span><br>
+                    <%= a.line1 %>, <%= a.city %>, <%= a.state %> - <%= a.zip %>
+                </div>
+                <form method="post" action="/auth/profile/addresses/<%= a.id %>/delete"
+                      onsubmit="return confirm('Delete this address?')">
+                    <button class="btn btn-sm btn-outline-danger rounded-pill classy-btn">
+                        <i class="bi bi-trash me-1"></i> Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    <% }) %>
+<% } else { %>
+    <div class="alert alert-info rounded-4 shadow-sm d-flex align-items-center">
+        <i class="bi bi-info-circle me-2"></i> No addresses saved yet.
+    </div>
+<% } %>
+
+<script>
+    // Fade-in animation
+    document.addEventListener("DOMContentLoaded", () => {
+        const cards = document.querySelectorAll(".fade-in-card");
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+        cards.forEach(card => observer.observe(card));
+    });
+</script>

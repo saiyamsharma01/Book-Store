@@ -1,0 +1,26 @@
+<div class="container my-5 d-flex justify-content-center fade-in-card">
+    <div class="alert alert-danger text-center rounded-4 shadow-sm p-4 classy-card" style="max-width: 600px; width: 100%;">
+        <h4 class="mb-3 fw-bold text-danger d-flex align-items-center justify-content-center">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> Oops! Something went wrong
+        </h4>
+        <p class="lead mb-3">
+            <%= message || 'Please try again later.' %>
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="/" class="btn btn-outline-primary rounded-pill px-4 classy-btn">
+                <i class="bi bi-house-door me-2"></i> Back to Home
+            </a>
+            <a href="javascript:history.back()" class="btn btn-outline-secondary rounded-pill px-4 classy-btn">
+                <i class="bi bi-arrow-left-circle me-2"></i> Try Again
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Fade-in animation
+    document.addEventListener("DOMContentLoaded", () => {
+        const card = document.querySelector(".fade-in-card");
+        if (card) card.classList.add("visible");
+    });
+</script>

@@ -1,0 +1,64 @@
+<div class="container my-5 classy-section">
+    <!-- Page Title -->
+    <h2 class="mb-4 text-secondary fw-bold border-bottom pb-2 d-flex align-items-center">
+        <i class="bi bi-tags me-2 text-primary"></i> All Categories
+    </h2>
+
+    <!-- Categories Grid -->
+    <div class="row g-4"> <!-- ✅ added gutter spacing -->
+        <% if (categories && categories.length > 0) { %>
+            <% categories.forEach(c => { %>
+                <div class="col-lg-3 col-md-4 col-sm-6 fade-in-card"> <!-- ✅ responsive columns -->
+                    <div class="card h-100 text-center shadow-sm border-0 rounded-4 classy-card hover-zoom">
+                        <!-- Category Icon -->
+                        <div class="p-3">
+                            <img src="<%= c.icon ? (c.icon.startsWith('http') ? c.icon : '/uploads/icons/' + c.icon) : '/icons/default.png' %>"
+                                 alt="<%= c.name %> icon"
+                                 class="mx-auto d-block"
+                                 style="height:60px; width:auto; object-fit:contain;">
+                        </div>
+
+                        <!-- Category Details -->
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold mb-1 classy-link text-truncate"><%= c.name %></h5>
+                            <small class="text-muted d-block mb-2"><%= c.description || '' %></small>
+
+                            <!-- Book Count Badge -->
+                            <span class="badge bg-secondary rounded-pill mb-2">
+                                <%= c.book_count %> books
+                            </span>
+
+                            <!-- Explore Button -->
+                            <a href="/category/<%= c.slug %>"
+                               class="btn btn-sm btn-outline-dark rounded-pill px-3 classy-btn">
+                                Explore
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="col-12">
+                <div class="alert alert-info rounded-4 shadow-sm text-center">
+                    <i class="bi bi-info-circle me-2"></i> No categories found.
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<script>
+    // Fade-in animation
+    document.addEventListener("DOMContentLoaded", () => {
+        const cards = document.querySelectorAll(".fade-in-card");
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                    observer.unobserve(entry.target); // animate once
+                }
+            });
+        }, { threshold: 0.2 });
+        cards.forEach(card => observer.observe(card));
+    });
+</script>

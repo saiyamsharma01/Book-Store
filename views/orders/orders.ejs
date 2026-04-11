@@ -1,0 +1,92 @@
+<div class="container my-5 classy-section">
+    <h2 class="mb-4 text-secondary fw-bold border-bottom pb-2 d-flex align-items-center">
+        <i class="bi bi-box-seam me-2 text-primary"></i> My Orders
+    </h2>
+
+    <% if (orders.length === 0) { %>
+        <div class="alert alert-info rounded-4 shadow-sm">
+            <i class="bi bi-info-circle me-2"></i> You have no past orders.
+            <a href="/" class="alert-link">Browse books</a> to start shopping.
+        </div>
+    <% } else { %>
+        <% orders.forEach(order => { %>
+            <div class="card mb-4 border-0 rounded-4 shadow-sm classy-card fade-in-card">
+                <div class="card-header d-flex justify-content-between align-items-center bg-light rounded-top">
+          <span class="fw-bold">
+            <i class="bi bi-receipt me-2 text-primary"></i> Order #<%= order.id %>
+          </span>
+                    <span class="badge
+            <%= order.status === 'Delivered' ? 'bg-success'
+                            : order.status === 'Pending' ? 'bg-warning text-dark'
+                                    : 'bg-secondary' %> rounded-pill px-3">
+            <%= order.status %>
+          </span>
+                    <span class="text-muted small"><%= new Date(order.created_at).toLocaleDateString() %></span>
+                </div>
+                <div class="card-body">
+                    <!-- Payment Mode -->
+                    <p class="mb-3">
+                        <strong><i class="bi bi-credit-card me-2 text-primary"></i> Payment Mode:</strong>
+                        <% if (order.payment_mode && order.payment_mode.toLowerCase() === 'cod') { %>
+                            <span class="badge bg-info text-dark rounded-pill px-3">Cash on Delivery</span>
+                        <% } else if (order.payment_mode && order.payment_mode.toLowerCase() === 'razorpay') { %>
+                            <span class="badge bg-primary rounded-pill px-3">Razorpay</span>
+                        <% } else { %>
+                            <span class="badge bg-secondary rounded-pill px-3"><%= order.payment_mode || 'Unknown' %></span>
+                        <% } %>
+                    </p>
+
+                    <!-- Razorpay Order ID (optional) -->
+                    <% if (order.razorpay_order_id) { %>
+                        <p class="small text-muted">
+                            <i class="bi bi-hash me-2"></i> Razorpay Ref: <code><%= order.razorpay_order_id %></code>
+                        </p>
+                    <% } %>
+
+                    <!-- Items Table -->
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle classy-table">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Book</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Subtotal</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <% order.items.forEach(item => { %>
+                                <tr>
+                                    <td class="fw-semibold"><%= item.title %></td>
+                                    <td><span class="badge bg-secondary rounded-pill"><%= item.quantity %></span></td>
+                                    <td>₹<%= item.price %></td>
+                                    <td class="fw-bold text-success">₹<%= item.price * item.quantity %></td>
+                                </tr>
+                            <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Total -->
+                    <h5 class="fw-bold mt-3">Total: <span class="text-success">₹<%= order.total %></span></h5>
+                </div>
+            </div>
+        <% }) %>
+    <% } %>
+</div>
+
+<script>
+    // Fade-in animation
+    document.addEventListener("DOMContentLoaded", () => {
+        const cards = document.querySelectorAll(".fade-in-card");
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+        cards.forEach(card => observer.observe(card));
+    });
+</script>

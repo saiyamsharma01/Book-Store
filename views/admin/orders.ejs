@@ -1,0 +1,134 @@
+<div class="container my-5 fade-in-card">
+    <h2 class="mb-4 text-secondary fw-bold d-flex align-items-center">
+        <i class="bi bi-box-seam me-2 text-primary"></i> Manage Orders
+    </h2>
+
+    <!-- Flash Messages -->
+    <% if (success) { %>
+        <div class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm d-flex align-items-center" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> <%= success %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <% } %>
+
+    <% if (error) { %>
+        <div class="alert alert-danger alert-dismissible fade show rounded-4 shadow-sm d-flex align-items-center" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> <%= error %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <% } %>
+
+    <div class="card border-0 rounded-4 shadow-sm classy-card">
+        <div class="card-body">
+            <% if (orders && orders.length > 0) { %>
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped table-hover align-middle classy-table">
+                        <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>User ID</th>
+                            <th>Address</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Payment Mode</th>
+                            <th class="d-none d-md-table-cell">Razorpay Order ID</th>
+                            <th class="d-none d-md-table-cell">Placed On</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <% orders.forEach(order => { %>
+                            <tr>
+                                <td><%= order.id %></td>
+                                <td><%= order.user_id %></td>
+                                <td>
+                                    <% if (order.street) { %>
+                                        <small class="text-muted">
+                                            <%= order.street %>, <%= order.city %>, <%= order.state %> - <%= order.zip %>
+                                        </small>
+                                    <% } else { %>
+                                        <span class="text-muted">—</span>
+                                    <% } %>
+                                </td>
+                                <td class="fw-bold text-success">₹<%= order.total %></td>
+
+                                <!-- Order Status -->
+                                <td>
+                                    <% if (order.status === 'Delivered' || order.status === 'shipped') { %>
+                                        <span class="badge bg-success rounded-pill px-3"><%= order.status %></span>
+                                    <% } else if (order.status === 'Pending') { %>
+                                        <span class="badge bg-warning text-dark rounded-pill px-3"><%= order.status %></span>
+                                    <% } else if (order.status === 'Cancelled') { %>
+                                        <span class="badge bg-danger rounded-pill px-3"><%= order.status %></span>
+                                    <% } else { %>
+                                        <span class="badge bg-secondary rounded-pill px-3"><%= order.status %></span>
+                                    <% } %>
+                                </td>
+
+                                <!-- Payment Mode -->
+                                <td>
+                                    <% if (order.payment_mode && order.payment_mode.toLowerCase() === 'cod') { %>
+                                        <span class="badge bg-info text-dark rounded-pill px-3">Cash on Delivery</span>
+                                    <% } else if (order.payment_mode && order.payment_mode.toLowerCase() === 'razorpay') { %>
+                                        <span class="badge bg-primary rounded-pill px-3">Razorpay</span>
+                                    <% } else { %>
+                                        <span class="badge bg-secondary rounded-pill px-3"><%= order.payment_mode || 'Unknown' %></span>
+                                    <% } %>
+                                </td>
+
+                                <!-- Razorpay Order ID -->
+                                <td class="d-none d-md-table-cell">
+                                    <% if (order.razorpay_order_id) { %>
+                                        <code><%= order.razorpay_order_id %></code>
+                                    <% } else { %>
+                                        <span class="text-muted">—</span>
+                                    <% } %>
+                                </td>
+
+                                <!-- Created At -->
+                                <td class="d-none d-md-table-cell"><%= new Date(order.created_at).toLocaleDateString() %></td>
+
+                                <!-- Actions -->
+                                <td class="text-end">
+                                    <div class="d-flex justify-content-end flex-wrap gap-2">
+                                        <form method="post" action="/admin/orders/<%= order.id %>/status" class="d-inline">
+                                            <select name="status" class="form-select form-select-sm d-inline w-auto rounded-pill me-2">
+                                                <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                                <option value="shipped" <%= order.status === 'shipped' ? 'selected' : '' %>>Shipped</option>
+                                                <option value="Delivered" <%= order.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                                <option value="Cancelled" <%= order.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-sm btn-outline-success rounded-pill classy-btn">
+                                                <i class="bi bi-pencil-square"></i> Update
+                                            </button>
+                                        </form>
+
+                                        <form method="post" action="/admin/orders/<%= order.id %>/delete"
+                                              onsubmit="return confirm('Delete order <%= order.id %>?');">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill classy-btn">
+                                                <i class="bi bi-trash"></i> Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } else { %>
+                <div class="alert alert-info rounded-4 shadow-sm d-flex align-items-center">
+                    <i class="bi bi-info-circle me-2"></i> No orders found.
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".fade-in-card").forEach(card => {
+            card.classList.add("visible");
+        });
+    });
+</script>

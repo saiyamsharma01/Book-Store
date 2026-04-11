@@ -1,0 +1,80 @@
+<!-- Include Admin Navbar -->
+
+<div class="container my-5 fade-in-card">
+    <h2 class="mb-4 text-secondary fw-bold d-flex align-items-center">
+        <i class="bi bi-people me-2 text-primary"></i> Manage Users
+    </h2>
+
+    <div class="card border-0 rounded-4 shadow-sm classy-card">
+        <div class="card-body">
+            <% if (users && users.length > 0) { %>
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped table-hover align-middle classy-table">
+                        <thead class="table-dark">
+                        <tr>
+                            <th class="d-none d-md-table-cell">ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th class="d-none d-md-table-cell">Joined</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <% let hasCustomers = false; %>
+                        <% users.forEach(user => { %>
+                            <% if (user.role !== 'admin') { %> <!-- ✅ Skip admins -->
+                            <% hasCustomers = true; %>
+                            <tr>
+                                <td class="d-none d-md-table-cell"><%= user.id %></td>
+                                <td><%= user.name %></td>
+                                <td><%= user.email %></td>
+                                <td>
+                                    <span class="badge bg-secondary rounded-pill px-3">Customer</span>
+                                </td>
+                                <td class="d-none d-md-table-cell">
+                                    <% if (user.created_at) { %>
+                                        <%= new Date(user.created_at).toLocaleDateString() %>
+                                    <% } else { %>
+                                        <span class="text-muted">—</span>
+                                    <% } %>
+                                </td>
+                                <td class="text-end">
+                                    <div class="d-flex justify-content-end flex-wrap gap-2">
+                                        <!-- Delete Only -->
+                                        <form method="post" action="/admin/users/<%= user.id %>/delete"
+                                              onsubmit="return confirm('Delete user <%= user.name %>?');">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill classy-btn">
+                                                <i class="bi bi-trash"></i> Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            <% } %>
+                        <% }) %>
+
+                        <% if (!hasCustomers) { %>
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">No customers found.</td>
+                            </tr>
+                        <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } else { %>
+                <div class="alert alert-info rounded-4 shadow-sm d-flex align-items-center">
+                    <i class="bi bi-info-circle me-2"></i> No users found.
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".fade-in-card").forEach(card => {
+            card.classList.add("visible");
+        });
+    });
+</script>

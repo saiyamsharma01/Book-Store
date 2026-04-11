@@ -1,0 +1,184 @@
+<div class="container my-5 classy-section">
+    <!-- Page Title -->
+    <h2 class="mb-4 text-secondary fw-bold border-bottom pb-2 d-flex align-items-center">
+        <i class="bi bi-receipt me-2 text-primary"></i> Review Your Order
+    </h2>
+
+    <% if (cart.length === 0) { %>
+        <!-- Empty Cart Fallback -->
+        <div class="alert alert-info rounded-4 shadow-sm text-center">
+            <i class="bi bi-info-circle me-2"></i> Your cart is empty.
+            <br>
+            <a href="/books" class="btn btn-outline-primary mt-3 rounded-pill classy-btn">
+                <i class="bi bi-arrow-left me-1"></i> Browse Books
+            </a>
+        </div>
+    <% } else { %>
+        <!-- Order Summary -->
+        <div class="card border-0 rounded-4 shadow-sm classy-card mb-4 fade-in-card">
+            <div class="card-body">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-bag-check me-2 text-primary"></i> Order Items
+                </h5>
+                <div class="table-responsive">
+                    <table class="table align-middle classy-table">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Book</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <% cart.forEach(item => { %>
+                            <tr>
+                                <td class="fw-semibold">
+                                    <img src="<%= item.image %>" alt="Book cover" width="40" class="me-2 rounded">
+                                    <%= item.title %>
+                                </td>
+                                <td>₹<%= item.price %></td>
+                                <td>
+                                    <span class="badge bg-secondary rounded-pill">
+                                        <%= item.quantity %>
+                                    </span>
+                                </td>
+                                <td class="fw-bold text-success">₹<%= item.price * item.quantity %></td>
+                            </tr>
+                        <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+                <h4 class="fw-bold mt-3">
+                    Total: <span class="text-success">₹<%= total %></span>
+                </h4>
+            </div>
+        </div>
+
+        <!-- Checkout Form -->
+        <form action="/cart/checkout" method="POST" class="fade-in-card" id="checkoutForm">
+            <!-- Address Section -->
+            <div class="card border-0 rounded-4 shadow-sm classy-card mb-4">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-geo-alt me-2 text-primary"></i> Delivery Address
+                    </h5>
+                    <% if (addresses && addresses.length > 0) { %>
+                        <select name="address_id" id="addressSelect" class="form-select rounded-pill classy-input" required>
+                            <% addresses.forEach(addr => { %>
+                                <option value="<%= addr.id %>">
+                                    <%= addr.street %>, <%= addr.city %>, <%= addr.state %> - <%= addr.zip %>
+                                </option>
+                            <% }) %>
+                        </select>
+                        <p class="mt-2 text-muted">
+                            Delivering to: <span id="selectedAddress"><%= addresses[0].street %>, <%= addresses[0].city %></span>
+                        </p>
+                    <% } else { %>
+                        <div class="alert alert-warning rounded-4 shadow-sm">
+                            <i class="bi bi-exclamation-triangle me-2"></i> No address found.
+                            Please <a href="/auth/profile" class="alert-link">add an address</a>.
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <!-- Payment Mode Section -->
+            <div class="card border-0 rounded-4 shadow-sm classy-card mb-4">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-credit-card me-2 text-primary"></i> Payment Method
+                    </h5>
+                    <select name="payment_mode" id="paymentMode" class="form-select rounded-pill classy-input" required>
+                        <option value="">Select a payment method</option>
+                        <option value="COD">💵 Cash on Delivery</option>
+                        <option value="Razorpay">💳 Pay Online (Card/UPI/Wallet)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Confirm Order -->
+            <div class="text-end mb-5"> <!-- ✅ added spacing -->
+                <button type="submit" id="confirmBtn"
+                        class="btn btn-lg btn-success rounded-pill classy-btn pulse-btn"
+                        <%= (!addresses || addresses.length === 0) ? 'disabled title="Please add an address first"' : '' %>>
+                    <span id="btnText"><i class="bi bi-check-circle me-2"></i> Confirm & Place Order</span>
+                    <span id="btnSpinner" class="spinner-border spinner-border-sm ms-2 d-none"></span>
+                </button>
+            </div>
+        </form>
+    <% } %>
+</div>
+
+<!-- Styles -->
+<style>
+    .classy-card {
+        border-radius: 1rem;
+        background: linear-gradient(135deg, #f9f9f9, #ffffff);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        transition: transform 0.2s ease;
+    }
+    .classy-card:hover { transform: translateY(-3px); }
+    .classy-table tbody tr:hover { background-color: #f1f9ff; }
+    .classy-input {
+        border-radius: 50px;
+        padding: 0.6rem 1rem;
+        border: 1px solid #ccc;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .classy-input:focus {
+        border-color: #4CAF50;
+        box-shadow: 0 0 6px rgba(76,175,80,0.4);
+    }
+    .pulse-btn {
+        animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(76,175,80,0.4); }
+        70% { box-shadow: 0 0 0 15px rgba(76,175,80,0); }
+        100% { box-shadow: 0 0 0 0 rgba(76,175,80,0); }
+    }
+    .fade-in-card { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+    .fade-in-card.visible { opacity: 1; transform: translateY(0); }
+</style>
+
+<!-- Animation & UX Script -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Fade-in animation
+        document.querySelectorAll(".fade-in-card").forEach(card => {
+            card.classList.add("visible");
+        });
+
+        // Disable confirm button until payment mode selected
+        const paymentSelect = document.getElementById("paymentMode");
+        const confirmBtn = document.getElementById("confirmBtn");
+        if (paymentSelect && confirmBtn) {
+            confirmBtn.disabled = true;
+            paymentSelect.addEventListener("change", () => {
+                confirmBtn.disabled = !paymentSelect.value;
+            });
+        }
+
+        // Update selected address summary
+        const addressSelect = document.getElementById("addressSelect");
+        const selectedAddress = document.getElementById("selectedAddress");
+        if (addressSelect && selectedAddress) {
+            addressSelect.addEventListener("change", () => {
+                selectedAddress.textContent = addressSelect.options[addressSelect.selectedIndex].text;
+            });
+        }
+
+        // Show spinner on submit
+        const checkoutForm = document.getElementById("checkoutForm");
+        const btnText = document.getElementById("btnText");
+        const btnSpinner = document.getElementById("btnSpinner");
+        if (checkoutForm && confirmBtn) {
+            checkoutForm.addEventListener("submit", () => {
+                confirmBtn.disabled = true;
+                btnText.textContent = "Processing...";
+                btnSpinner.classList.remove("d-none");
+            });
+        }
+    });
+</script>

@@ -1,0 +1,94 @@
+<h2 class="mt-4 mb-3 text-secondary fw-bold d-flex align-items-center">
+    <i class="bi bi-book-half me-2 text-primary"></i> Manage Books
+</h2>
+
+<!-- Flash Messages -->
+<% if (typeof success !== 'undefined' && success) { %>
+    <div class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm d-flex align-items-center" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i> <%= success %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+<% } %>
+
+<% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert-danger alert-dismissible fade show rounded-4 shadow-sm d-flex align-items-center" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i> <%= error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+<% } %>
+
+<div class="card border-0 rounded-4 shadow-sm classy-card fade-in-card">
+    <div class="card-body">
+        <% if (books && books.length > 0) { %>
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-hover align-middle classy-table">
+                    <thead class="table-dark">
+                    <tr>
+                        <th class="d-none d-md-table-cell">ID</th>
+                        <th>Image</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th class="d-none d-md-table-cell">Created On</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% books.forEach(b => { %>
+                        <tr>
+                            <td class="d-none d-md-table-cell"><%= b.id %></td>
+                            <td>
+                                <% if (b.image) { %>
+                                    <img src="<%= b.image.startsWith('http') || b.image.startsWith('/uploads/books/') ? b.image : '/uploads/books/' + b.image %>"
+                                         alt="<%= b.title %>" width="50" height="70" class="rounded shadow-sm">
+                                <% } else { %>
+                                    <img src="/images/default-book.png" alt="No cover" width="50" height="70" class="rounded shadow-sm">
+                                <% } %>
+                            </td>
+                            <td class="fw-semibold"><%= b.title %></td>
+                            <td><%= b.author %></td>
+                            <td class="fw-bold text-success">₹<%= b.price %></td>
+                            <td>
+                                <% if (b.stock === 0) { %>
+                                    <span class="badge bg-danger rounded-pill">Out of Stock</span>
+                                <% } else if (b.stock <= 10) { %>
+                                    <span class="badge bg-warning text-dark rounded-pill">Only <%= b.stock %> left</span>
+                                <% } else { %>
+                                    <span class="badge bg-info text-dark rounded-pill"><%= b.stock %></span>
+                                <% } %>
+                            </td>
+                            <td class="d-none d-md-table-cell"><%= new Date(b.created_at).toLocaleString() %></td>
+                            <td class="text-end">
+                                <div class="d-flex flex-wrap justify-content-end gap-2">
+                                    <a href="/admin/books/<%= b.id %>/edit" class="btn btn-sm btn-outline-warning rounded-pill classy-btn">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </a>
+                                    <form method="post" action="/admin/books/<%= b.id %>/delete"
+                                          onsubmit="return confirm('Delete book <%= b.title %>?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill classy-btn">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        <% } else { %>
+            <div class="alert alert-info rounded-4 shadow-sm d-flex align-items-center">
+                <i class="bi bi-info-circle me-2"></i> No books found.
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".fade-in-card").forEach(card => {
+            card.classList.add("visible");
+        });
+    });
+</script>
