@@ -1,171 +1,783 @@
-/* --- Modern CSS for KBooks (Professional Overhaul) --- */
+/* ==========================================================================
+   📚 Folio Premium Design System (3-Mode Editorial Overhaul)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Theme Color Declarations
+   -------------------------------------------------------------------------- */
+
+/* Custom Mode: Default (Warm Book-Paper Cream & Terracotta) */
+:root, [data-theme="custom"] {
+    --primary: #111827;            /* Deep Midnight Ink */
+    --primary-hover: #1f2937;
+    --accent: #c2410c;             /* Terracotta / Burnt Sienna */
+    --accent-hover: #ea580c;
+    --accent-light: #fff7ed;
+    --bg-paper: #FAF9F5;           /* Soft Warm Book-Paper Cream */
+    --bg-card: #ffffff;
+    --text-main: #1f2937;          /* Warm Charcoal for perfect reading comfort */
+    --text-muted: #5e6b7e;         /* Muted Slate Grey */
+    --border-color: #eae7df;       /* Soft Sand border to replace sterile grey */
+    --hero-bg: linear-gradient(135deg, #111827 0%, #1e1b4b 100%);
+    --hero-glow: radial-gradient(circle at 80% 20%, rgba(194, 65, 12, 0.15) 0%, transparent 60%);
+    --card-shadow-hover: rgba(17, 24, 39, 0.12);
+}
+
+/* Light Mode: Sleek High-Contrast Minimalist */
+[data-theme="light"] {
+    --primary: #0f172a;            /* Midnight Black */
+    --primary-hover: #1e293b;
+    --accent: #2563eb;             /* Royal Blue */
+    --accent-hover: #1d4ed8;
+    --accent-light: #eff6ff;
+    --bg-paper: #ffffff;           /* Clean Pure White */
+    --bg-card: #f8fafc;            /* Subtle Light Grey Card */
+    --text-main: #0f172a;          /* Deep Slate */
+    --text-muted: #64748b;         /* Slate Grey */
+    --border-color: #e2e8f0;       /* Sterile Grey Border */
+    --hero-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    --hero-glow: radial-gradient(circle at 80% 20%, rgba(37, 99, 235, 0.12) 0%, transparent 60%);
+    --card-shadow-hover: rgba(15, 23, 42, 0.08);
+}
+
+/* Dark Mode: Sleek Midnight-Blue Nocturnal */
+[data-theme="dark"] {
+    --primary: #f8fafc;            /* Ice White for Solid Headers */
+    --primary-hover: #ffffff;
+    --accent: #f97316;             /* Golden Amber/Orange */
+    --accent-hover: #ea580c;
+    --accent-light: rgba(249, 115, 22, 0.1);
+    --bg-paper: #0b0f19;           /* Pure Space Blue-Black */
+    --bg-card: #111827;            /* Deep Slate Grey Card */
+    --text-main: #f3f4f6;          /* Soft Off-White for High Readability */
+    --text-muted: #94a3b8;         /* Muted Slate Grey */
+    --border-color: #1f2937;       /* Dark Border Lines */
+    --hero-bg: linear-gradient(135deg, #111827 0%, #030712 100%);
+    --hero-glow: radial-gradient(circle at 80% 20%, rgba(249, 115, 22, 0.15) 0%, transparent 60%);
+    --card-shadow-hover: rgba(0, 0, 0, 0.4);
+}
+
+/* Layout Constants */
 :root {
-    --primary: #6366f1;
-    --primary-hover: #4f46e5;
-    --secondary: #1e293b;
-    --accent: #f59e0b;
-    --bg-light: #f8fafc;
-    --card-bg: #ffffff;
-    --text-main: #0f172a;
-    --text-muted: #64748b;
-    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 24px 24px -1px rgb(0 0 0 / 0.06);
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.03);
+    --shadow-md: 0 10px 30px -10px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
+    --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 24px;
+}
+
+/* ==========================================================================
+   2. Global Smooth Transitions
+   ========================================================================== */
+
+body, .classy-card, .navbar, .form-control, .form-select, .book-detail-wrapper, 
+.book-detail-meta-box, footer, a, button, input, textarea, .card, .badge, 
+.search-container, .alert {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease !important;
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
-    background-color: var(--bg-light);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-paper);
     color: var(--text-main);
-    line-height: 1.6;
+    letter-spacing: -0.01em;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, .navbar-brand {
-    font-family: 'Libre Baskerville', serif;
+h1, h2, h3, h4, h5, h6, .brand-font {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: -0.02em;
 }
 
-/* --- Navbar --- */
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+a:hover {
+    color: var(--accent-hover);
+}
+
+/* ==========================================================================
+   3. Layout Components
+   ========================================================================== */
+
+.main-content-wrapper {
+    min-height: 80vh;
+}
+
+.classy-section {
+    padding: 80px 0;
+}
+
+.section-title {
+    font-size: 2.75rem;
+    position: relative;
+    display: inline-block;
+    margin-bottom: 2rem;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background-color: var(--accent);
+}
+
+/* ==========================================================================
+   4. Navbar (Header) Design
+   ========================================================================== */
+
 .navbar {
-    background: rgba(255, 255, 255, 0.8) !important;
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-    transition: var(--transition);
+    background: rgba(var(--navbar-bg-rgb, 250, 249, 245), 0.85) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.2rem 0;
 }
 
-.navbar-brand span {
-    color: var(--secondary) !important;
-    letter-spacing: -0.5px;
+/* Adjust transparency variables dynamically */
+:root, [data-theme="custom"] { --navbar-bg-rgb: 250, 249, 245; }
+[data-theme="light"] { --navbar-bg-rgb: 255, 255, 255; }
+[data-theme="dark"] { --navbar-bg-rgb: 11, 15, 25; }
+
+.navbar-brand {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary) !important;
+    letter-spacing: -0.03em;
+}
+
+.navbar-brand i {
+    color: var(--accent) !important;
 }
 
 .nav-link {
-    color: var(--text-main) !important;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 500;
-    padding: 0.5rem 1rem !important;
-    transition: var(--transition);
-    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--text-main) !important;
+    padding: 0.6rem 1.2rem !important;
+    border-radius: var(--radius-sm);
 }
 
-.nav-link:hover {
-    color: var(--primary) !important;
-    background: rgba(99, 102, 241, 0.05);
+.nav-link:hover, .nav-link.active {
+    color: var(--accent) !important;
+    background-color: var(--accent-light);
 }
 
 .nav-link.active {
-    color: var(--primary) !important;
     font-weight: 600;
 }
 
-/* --- Cards --- */
+/* Search Bar in Nav */
+.search-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+}
+
+.search-container:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(194, 65, 12, 0.08);
+}
+
+/* ==========================================================================
+   5. Theme Selector UI Component
+   ========================================================================== */
+
+.theme-dropdown-menu {
+    border-radius: var(--radius-md) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: var(--shadow-md) !important;
+    background-color: var(--bg-card) !important;
+    padding: 0.5rem !important;
+}
+
+.theme-dropdown-item {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 1rem !important;
+    color: var(--text-main) !important;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.theme-dropdown-item:hover, .theme-dropdown-item.active {
+    background-color: var(--accent-light) !important;
+    color: var(--accent) !important;
+}
+
+/* ==========================================================================
+   6. Editorial Cards
+   ========================================================================== */
+
 .classy-card {
-    border: none;
-    border-radius: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
     overflow: hidden;
-    transition: var(--transition);
-    background: var(--card-bg);
+    box-shadow: var(--shadow-sm);
 }
 
 .classy-card:hover {
-    transform: translateY(-10px);
-    box-shadow: var(--shadow);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px -15px var(--card-shadow-hover);
+    border-color: rgba(194, 65, 12, 0.15);
 }
 
-.card-img-top {
-    border-radius: 16px 16px 0 0;
-    transition: var(--transition);
-}
-
-.classy-card:hover .card-img-top {
-    transform: scale(1.05);
-}
-
-/* --- Buttons --- */
-.btn-primary {
-    background-color: var(--primary);
-    border-color: var(--primary);
-    border-radius: 10px;
-    padding: 10px 24px;
-    font-weight: 600;
-    transition: var(--transition);
-}
-
-.btn-primary:hover {
-    background-color: var(--primary-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
-}
-
-.btn-outline-dark {
-    border-radius: 10px;
-    border-width: 2px;
-    font-weight: 600;
-    transition: var(--transition);
-}
-
-/* --- Hero Section --- */
-.hero-section {
-    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-    padding: 80px 0;
-    border-radius: 30px;
-    margin-bottom: 50px;
-    color: white;
+/* Card Cover Image Styling */
+.card-img-wrapper {
     position: relative;
     overflow: hidden;
+    background-color: var(--bg-paper);
+    padding-top: 135%; /* Book aspect ratio */
 }
 
-.hero-section::after {
+.card-img-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.classy-card:hover .card-img-wrapper img {
+    transform: scale(1.06);
+}
+
+.classy-card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0.4rem;
+    color: var(--primary) !important;
+}
+
+.classy-card-author {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+}
+
+.classy-card-price {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--accent);
+}
+
+/* ==========================================================================
+   7. Buttons
+   ========================================================================== */
+
+.btn-premium {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.8rem 2rem;
+    border-radius: var(--radius-lg);
+    letter-spacing: 0.01em;
+}
+
+.btn-premium-primary {
+    background-color: var(--primary);
+    color: var(--bg-paper);
+    border: none;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-premium-primary:hover {
+    background-color: var(--primary-hover);
+    color: var(--bg-paper);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px var(--card-shadow-hover);
+}
+
+.btn-premium-accent {
+    background-color: var(--accent);
+    color: #ffffff;
+    border: none;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-premium-accent:hover {
+    background-color: var(--accent-hover);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px var(--card-shadow-hover);
+}
+
+.btn-premium-outline {
+    background-color: transparent;
+    color: var(--primary);
+    border: 1.5px solid var(--primary);
+}
+
+.btn-premium-outline:hover {
+    background-color: var(--primary);
+    color: var(--bg-paper);
+    transform: translateY(-2px);
+}
+
+.btn-premium-outline-accent {
+    background-color: transparent;
+    color: var(--accent);
+    border: 1.5px solid var(--accent);
+}
+
+.btn-premium-outline-accent:hover {
+    background-color: var(--accent);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   8. Editorial Hero Banner
+   ========================================================================== */
+
+.editorial-hero {
+    background: var(--hero-bg);
+    padding: 100px 0;
+    border-radius: var(--radius-lg);
+    position: relative;
+    overflow: hidden;
+    color: #ffffff;
+    margin-bottom: 60px;
+    box-shadow: var(--shadow-lg);
+}
+
+.editorial-hero::before {
     content: '';
     position: absolute;
-    top: -50%;
-    right: -10%;
-    width: 300px;
-    height: 300px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: var(--hero-glow);
+    pointer-events: none;
 }
 
-/* --- Animations --- */
-.fade-in-card {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+.editorial-hero h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
 }
 
-.fade-in-card.visible {
-    opacity: 1;
-    transform: translateY(0);
+.editorial-hero p {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 300;
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
 }
 
-/* --- Custom Scrollbar --- */
+/* ==========================================================================
+   9. Single Product Details (Book Detail)
+   ========================================================================== */
+
+.book-detail-wrapper {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 3rem;
+    box-shadow: var(--shadow-md);
+}
+
+.book-detail-title {
+    font-size: 3.5rem;
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+}
+
+.book-detail-author {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+}
+
+.book-detail-price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 2rem;
+}
+
+.book-detail-meta-box {
+    background-color: var(--bg-paper);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+/* ==========================================================================
+   10. Form Inputs & Control Redesign
+   ========================================================================== */
+
+.form-control, .form-select {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.95rem;
+    padding: 0.75rem 1.2rem;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border-color);
+    background-color: var(--bg-paper);
+    color: var(--text-main);
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: var(--bg-card);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(194, 65, 12, 0.08);
+}
+
+/* ==========================================================================
+   11. Badges & Micro-animations
+   ========================================================================== */
+
+.badge-premium {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+}
+
+.badge-premium-success {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+[data-theme="dark"] .badge-premium-success {
+    background-color: rgba(6, 95, 70, 0.2);
+    color: #34d399;
+}
+
+.badge-premium-warning {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+[data-theme="dark"] .badge-premium-warning {
+    background-color: rgba(146, 64, 14, 0.2);
+    color: #fbbf24;
+}
+
+.badge-premium-danger {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+[data-theme="dark"] .badge-premium-danger {
+    background-color: rgba(153, 27, 27, 0.2);
+    color: #f87171;
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--bg-light);
+    background: var(--bg-paper);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 10px;
+    background: var(--text-muted);
+    border-radius: 50px;
+    border: 3px solid var(--bg-paper);
+    opacity: 0.5;
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+/* ==========================================================================
+   12. Footer Section Redesign
+   ========================================================================== */
+
+.classy-footer {
+    background-color: var(--primary);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 80px 0 40px;
+    margin-top: 100px;
 }
 
-/* --- Footer --- */
-.footer {
-    background-color: var(--secondary);
-    color: #e2e8f0;
-    padding: 60px 0 30px;
-    margin-top: 80px;
+/* When dark mode is active, make footer background look clean */
+[data-theme="dark"] .classy-footer {
+    background-color: #030712;
+    border-top: 1px solid var(--border-color);
 }
 
-.footer a {
-    color: #94a3b8;
-    text-decoration: none;
-    transition: var(--transition);
+.classy-footer h5, .classy-footer h6 {
+    color: #ffffff;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
 }
 
-.footer a:hover {
-    color: white;
+/* Prevent bright colors in dark footer text elements */
+[data-theme="dark"] .classy-footer h5, [data-theme="dark"] .classy-footer h6 {
+    color: var(--accent);
+}
+
+.classy-footer a {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.classy-footer a:hover {
+    color: #ffffff;
+    padding-left: 4px;
+}
+
+.classy-footer .social-icons a {
+    background-color: rgba(255, 255, 255, 0.05);
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.classy-footer .social-icons a:hover {
+    background-color: var(--accent);
+    color: #ffffff;
+    transform: translateY(-4px);
+}
+
+/* ==========================================================================
+   13. Global Bootstrap Theme Overrides (For Dark & Light Modes)
+   ========================================================================== */
+
+/* Dark Mode Overrides */
+[data-theme="dark"] .text-dark,
+[data-theme="dark"] .text-dark a,
+[data-theme="dark"] .card-body a.text-dark,
+[data-theme="dark"] .card-title a,
+[data-theme="dark"] .classy-card-title a {
+    color: var(--text-main) !important;
+}
+
+[data-theme="dark"] .text-muted {
+    color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .text-secondary {
+    color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .bg-light {
+    background-color: var(--bg-card) !important;
+    color: var(--text-main) !important;
+}
+
+[data-theme="dark"] .bg-white {
+    background-color: var(--bg-card) !important;
+    color: var(--text-main) !important;
+}
+
+[data-theme="dark"] .card {
+    background-color: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-main) !important;
+}
+
+[data-theme="dark"] .form-label {
+    color: var(--text-main) !important;
+}
+
+[data-theme="dark"] input.form-control,
+[data-theme="dark"] select.form-select,
+[data-theme="dark"] textarea.form-control {
+    color: var(--text-main) !important;
+    background-color: var(--bg-paper) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] input.form-control::placeholder {
+    color: var(--text-muted) !important;
+    opacity: 0.7;
+}
+
+[data-theme="dark"] .alert-info,
+[data-theme="dark"] .alert-success,
+[data-theme="dark"] .alert-danger,
+[data-theme="dark"] .alert-warning {
+    background-color: var(--bg-card) !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+[data-theme="dark"] .page-link {
+    background-color: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    color: var(--accent) !important;
+}
+
+[data-theme="dark"] .modal-content {
+    background-color: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-main) !important;
+}
+
+[data-theme="dark"] .modal-header,
+[data-theme="dark"] .modal-footer {
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] strong.text-dark {
+    color: var(--text-main) !important;
+}
+
+[data-theme="dark"] .table {
+    color: var(--text-main) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .table th,
+[data-theme="dark"] .table td {
+    background-color: var(--bg-card) !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* Custom/Literary Mode Overrides */
+[data-theme="custom"] .bg-light {
+    background-color: var(--bg-paper) !important;
+}
+
+/* ==========================================================================
+   14. Mobile Responsiveness & Adaptive Layouts
+   ========================================================================== */
+
+/* Hero Title and Subtitle scaling */
+.hero-title {
+    font-size: 4.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+}
+
+.hero-subtitle {
+    font-size: 1.3rem;
+    opacity: 0.9;
+    max-width: 700px;
+    margin: 0 auto 3rem;
+    font-weight: 300;
+}
+
+/* Tablet & Mobile Breakpoints */
+@media (max-width: 991.98px) {
+    .hero-title {
+        font-size: 3.2rem;
+    }
+    
+    .navbar-collapse {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-top: 0.75rem;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.3s ease;
+    }
+    
+    .navbar-nav .nav-item {
+        margin: 0.5rem 0;
+        text-align: center;
+    }
+    
+    .navbar-nav .nav-link {
+        display: inline-block;
+        padding: 0.5rem 1.5rem !important;
+    }
+    
+    .navbar-collapse .d-flex {
+        justify-content: center;
+        width: 100%;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .hero-title {
+        font-size: 2.3rem;
+        padding: 0 10px;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.05rem;
+        margin-bottom: 2rem !important;
+        padding: 0 15px;
+    }
+    
+    .editorial-hero {
+        min-height: 440px !important;
+    }
+    
+    .hero-btn-group {
+        padding: 0 20px;
+    }
+    
+    .hero-btn-group .btn {
+        width: 100%;
+        padding: 12px 24px !important;
+    }
+
+    #soundToggleBtn {
+        bottom: 12px !important;
+        right: 12px !important;
+        padding: 0.4rem 1rem !important;
+        font-size: 0.75rem !important;
+    }
+    
+    /* Elegant adjustments for card columns on small devices */
+    .classy-card {
+        margin-bottom: 1rem;
+    }
+    
+    .classy-card-title {
+        font-size: 1.2rem !important;
+    }
+    
+    /* General heading sizing on mobile */
+    h2.brand-font {
+        font-size: 1.8rem !important;
+    }
+    
+    .d-flex.justify-content-between.align-items-end {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.95rem;
+    }
 }

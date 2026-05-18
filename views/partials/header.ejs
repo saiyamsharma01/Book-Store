@@ -1,10 +1,9 @@
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
         <!-- Brand -->
-        <a class="navbar-brand d-flex align-items-center"
-           href="/">
-            <i class="bi bi-book-half text-primary fs-3 me-2"></i>
-            <span class="fw-bold fs-4">KBooks</span>
+        <a class="navbar-brand d-flex align-items-center brand-font" href="/">
+            <i class="bi bi-book-half me-2"></i>
+            <span>Folio</span>
         </a>
 
         <!-- Toggler -->
@@ -30,43 +29,116 @@
                     <% } else { %>
                         <li class="nav-item">
                             <a class="nav-link position-relative" href="/cart">
-                                <i class="bi bi-bag"></i>
+                                <i class="bi bi-bag fs-5"></i>
                                 <% if (session.cartCount > 0) { %>
-                                    <span class="position-absolute translate-middle badge rounded-pill bg-primary" style="font-size: 0.6rem; top: 10px; right: -5px;">
+                                    <span class="position-absolute translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem; top: 10px; right: -5px; padding: 0.25em 0.5em;">
                                         <%= session.cartCount %>
                                     </span>
                                 <% } %>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/wishlist"><i class="bi bi-heart"></i></a>
+                            <a class="nav-link" href="/wishlist"><i class="bi bi-heart fs-5"></i></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/auth/profile">Profile</a>
                         </li>
                     <% } %>
                     <li class="nav-item">
-                        <a class="btn btn-sm btn-outline-danger ms-lg-3 rounded-pill" href="/auth/logout">Logout</a>
+                        <a class="btn btn-sm btn-outline-danger ms-lg-3 px-3 rounded-pill" href="/auth/logout" style="font-size: 0.85rem; font-weight: 600;">Logout</a>
                     </li>
                 <% } else { %>
                     <li class="nav-item">
                         <a class="nav-link" href="/auth/login">Login</a>
                     </li>
                     <li class="nav-item ms-lg-2">
-                        <a class="btn btn-primary rounded-pill px-4" href="/auth/signup">Join Now</a>
+                        <a class="btn btn-premium btn-premium-accent py-2 px-4 rounded-pill" href="/auth/signup" style="font-size: 0.85rem;">Join Now</a>
                     </li>
                 <% } %>
             </ul>
 
-            <!-- Search -->
-            <form class="ms-lg-4 mt-3 mt-lg-0" action="/search" method="GET">
-                <div class="input-group bg-light rounded-pill px-3 py-1">
-                    <input type="text" name="q" class="form-control border-0 bg-transparent shadow-none" placeholder="Search books..." style="width: 150px;">
-                    <button class="btn btn-link link-secondary border-0 p-0" type="submit">
-                        <i class="bi bi-search"></i>
+            <!-- Search and Theme Switcher flex container -->
+            <div class="d-flex align-items-center ms-lg-4 mt-3 mt-lg-0 gap-3">
+                <!-- Search Form -->
+                <form action="/search" method="GET" class="m-0">
+                    <div class="input-group search-container rounded-pill px-3 py-1">
+                        <input type="text" name="q" class="form-control border-0 bg-transparent shadow-none" placeholder="Search books..." style="width: 130px; font-size: 0.85rem;">
+                        <button class="btn btn-link link-secondary border-0 p-0" type="submit">
+                            <i class="bi bi-search" style="color: var(--text-muted);"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Theme Selector Dropdown -->
+                <div class="dropdown">
+                    <button class="btn btn-link border-0 p-0 rounded-circle d-flex align-items-center justify-content-center" 
+                            type="button" 
+                            id="themeDropdown" 
+                            data-bs-toggle="dropdown" 
+                            aria-expanded="false"
+                            style="width: 38px; height: 38px; background-color: var(--accent-light);">
+                        <i id="themeIconActive" class="bi bi-journal-bookmark" style="color: var(--accent); font-size: 1.15rem;"></i>
                     </button>
+                    <ul class="dropdown-menu dropdown-menu-end theme-dropdown-menu" aria-labelledby="themeDropdown">
+                        <li>
+                            <div class="dropdown-item theme-dropdown-item" onclick="setTheme('light')">
+                                <i class="bi bi-brightness-high"></i> Light
+                            </div>
+                        </li>
+                        <li>
+                            <div class="dropdown-item theme-dropdown-item" onclick="setTheme('dark')">
+                                <i class="bi bi-moon-stars"></i> Dark
+                            </div>
+                        </li>
+                        <li>
+                            <div class="dropdown-item theme-dropdown-item" onclick="setTheme('custom')">
+                                <i class="bi bi-journal-bookmark"></i> Literary
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </nav>
+
+<!-- Theme Controller Script -->
+<script>
+    function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        updateThemeUI(theme);
+    }
+
+    function updateThemeUI(theme) {
+        const themeIconActive = document.getElementById('themeIconActive');
+        if (!themeIconActive) return;
+
+        // Reset classes
+        themeIconActive.className = 'bi';
+
+        // Set class based on theme
+        if (theme === 'light') {
+            themeIconActive.classList.add('bi-brightness-high');
+        } else if (theme === 'dark') {
+            themeIconActive.classList.add('bi-moon-stars');
+        } else {
+            themeIconActive.classList.add('bi-journal-bookmark');
+        }
+
+        // Mark active item in dropdown
+        document.querySelectorAll('.theme-dropdown-item').forEach(item => {
+            item.classList.remove('active');
+            const itemText = item.textContent.trim().toLowerCase();
+            if (itemText.includes(theme === 'custom' ? 'literary' : theme)) {
+                item.classList.add('active');
+            }
+        });
+    }
+
+    // Initialize UI state on load
+    document.addEventListener('DOMContentLoaded', () => {
+        const activeTheme = localStorage.getItem('theme') || 'custom';
+        updateThemeUI(activeTheme);
+    });
+</script>

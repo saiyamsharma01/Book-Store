@@ -1,70 +1,83 @@
-<div class="container my-5 classy-section">
+<div class="container py-5">
     <% if (book) { %>
-        <div class="row g-4 fade-in-card mt-4 mb-4">
-            <!-- Book Image -->
-            <div class="col-lg-4 col-md-5 mb-3">
-                <div class="card border-0 shadow-sm rounded-4 classy-card h-100"> <!-- ✅ h-100 -->
-                    <% if (book.image || book.image_url) { %>
-                        <img src="<%= book.image || book.image_url %>"
-                             alt="<%= book.title %>"
-                             class="img-fluid rounded-4 h-100 w-100"
-                             style="object-fit: cover;">
-                    <% } else { %>
-                        <img src="/images/default-book.png"
-                             alt="No cover available"
-                             class="img-fluid rounded-4 h-100 w-100"
-                             style="object-fit: cover;">
-                    <% } %>
-                </div>
-            </div>
-
-            <!-- Book Details -->
-            <div class="col-lg-8 col-md-7 mb-3">
-                <div class="card border-0 shadow-sm rounded-4 classy-card h-100"> <!-- ✅ h-100 -->
-                    <div class="card-body d-flex flex-column"> <!-- ✅ flex column -->
-                        <h2 class="fw-bold text-secondary mb-2"><%= book.title %></h2>
-                        <p class="text-muted mb-2">
-                            <i class="bi bi-person me-1"></i> by <%= book.author %>
-                        </p>
-                        <p class="mb-3"><%= book.description %></p>
-                        <p class="fs-5 fw-bold text-success mb-4">
-                            <i class="bi bi-currency-rupee me-1"></i><%= book.price %>
-                        </p>
-
-                        <!-- Stock Messages -->
-                        <% if (book.stock === 0) { %>
-                            <p class="text-danger fw-bold mb-3">
-                                <i class="bi bi-x-circle me-1"></i> Out of Stock
-                            </p>
-                        <% } else if (book.stock <= 10) { %>
-                            <p class="text-warning fw-bold mb-3">
-                                <i class="bi bi-exclamation-triangle me-1"></i> Hurry! Only <%= book.stock %> left in stock
-                            </p>
+        <div class="book-detail-wrapper fade-in-card">
+            <div class="row g-5 align-items-center">
+                <!-- Book Image Cover -->
+                <div class="col-lg-5 col-md-6 mb-4 mb-md-0">
+                    <div class="card border-0 shadow-lg rounded-4 overflow-hidden" style="transition: var(--transition-smooth); transform: perspective(800px) rotateY(-5deg); box-shadow: -15px 15px 35px rgba(0,0,0,0.15) !important;">
+                        <% if (book.image || book.image_url) { %>
+                            <img src="<%= book.image || book.image_url %>"
+                                 alt="<%= book.title %>"
+                                 class="img-fluid w-100"
+                                 style="max-height: 520px; object-fit: cover;">
                         <% } else { %>
-                            <p class="text-muted mb-3">
-                                <i class="bi bi-check-circle me-1"></i> In Stock
-                            </p>
+                            <img src="/images/default-book.png"
+                                 alt="No cover available"
+                                 class="img-fluid w-100"
+                                 style="max-height: 520px; object-fit: cover;">
                         <% } %>
+                    </div>
+                </div>
+
+                <!-- Book Details Metadata -->
+                <div class="col-lg-7 col-md-6">
+                    <div class="d-flex flex-column h-100">
+                        <!-- Book Category Badge (if available, else fallback) -->
+                        <div class="mb-3">
+                            <span class="badge badge-premium badge-premium-success" style="font-size: 0.75rem;">Curated Collection</span>
+                        </div>
+                        
+                        <h1 class="book-detail-title brand-font mb-2"><%= book.title %></h1>
+                        <p class="book-detail-author mb-4 d-flex align-items-center gap-2">
+                            <i class="bi bi-person-circle fs-5 text-secondary" style="color: var(--accent) !important;"></i> 
+                            <span>By <strong class="text-dark"><%= book.author %></strong></span>
+                        </p>
+                        
+                        <div class="d-flex align-items-center gap-3 mb-4">
+                            <span class="book-detail-price mb-0">₹<%= book.price %></span>
+                            
+                            <!-- Stock Status Badges -->
+                            <% if (book.stock === 0) { %>
+                                <span class="badge badge-premium badge-premium-danger" style="font-size: 0.75rem;">
+                                    Out of Stock
+                                </span>
+                            <% } else if (book.stock <= 10) { %>
+                                <span class="badge badge-premium badge-premium-warning" style="font-size: 0.75rem;">
+                                    Hurry! Only <%= book.stock %> left in stock
+                                </span>
+                            <% } else { %>
+                                <span class="badge badge-premium badge-premium-success" style="font-size: 0.75rem;">
+                                    In Stock & Ready to Ship
+                                </span>
+                            <% } %>
+                        </div>
+
+                        <!-- Book Description Box -->
+                        <div class="book-detail-meta-box">
+                            <h5 class="fw-bold mb-3 brand-font" style="font-size: 1.25rem;">Synopsis</h5>
+                            <p class="mb-0 text-muted" style="line-height: 1.8; font-size: 0.95rem;"><%= book.description || "No description available for this curated title." %></p>
+                        </div>
 
                         <!-- Actions anchored at bottom -->
-                        <div class="d-flex flex-wrap gap-2 mt-auto"> <!-- ✅ mt-auto pushes to bottom -->
+                        <div class="d-flex flex-wrap gap-3 mt-auto">
                             <% if (book.stock > 0) { %>
-                                <form method="post" action="/cart/add/<%= book.id %>">
-                                    <button type="submit" class="btn btn-sm btn-outline-dark rounded-pill classy-btn">
-                                        <i class="bi bi-cart-plus me-1"></i> Add to Cart
+                                <form method="post" action="/cart/add/<%= book.id %>" class="m-0">
+                                    <button type="submit" class="btn btn-premium btn-premium-accent py-3 px-4 rounded-pill d-flex align-items-center gap-2">
+                                        <i class="bi bi-cart-plus fs-5"></i> Add to Cart
                                     </button>
                                 </form>
                             <% } else { %>
-                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill classy-btn" disabled>
-                                    <i class="bi bi-cart-x me-1"></i> Add to Cart
+                                <button type="button" class="btn btn-premium btn-premium-accent py-3 px-4 rounded-pill d-flex align-items-center gap-2" disabled style="background-color: var(--border-color); color: var(--text-muted);">
+                                    <i class="bi bi-cart-x fs-5"></i> Out of Stock
                                 </button>
                             <% } %>
 
-                            <a href="/wishlist/add/<%= book.id %>" class="btn btn-sm btn-outline-danger rounded-pill classy-btn">
-                                <i class="bi bi-heart me-1"></i> Add to Wishlist
+                            <a href="/wishlist/add/<%= book.id %>" class="btn btn-premium btn-premium-outline-accent py-3 px-4 rounded-pill d-flex align-items-center gap-2">
+                                <i class="bi bi-heart fs-5"></i> Add to Wishlist
                             </a>
-                            <a href="/books" class="btn btn-sm btn-outline-secondary rounded-pill classy-btn">
-                                <i class="bi bi-arrow-left me-1"></i> Back to Books
+                            
+                            <a href="/books" class="btn btn-premium btn-premium-outline py-3 px-4 rounded-pill d-flex align-items-center gap-2">
+                                <i class="bi bi-arrow-left fs-5"></i> Back to Catalog
                             </a>
                         </div>
                     </div>
@@ -72,40 +85,14 @@
             </div>
         </div>
     <% } else { %>
-        <div class="alert alert-danger rounded-4 shadow-sm text-center mt-4 mb-4">
-            <i class="bi bi-exclamation-triangle me-2"></i> Book not found.
+        <div class="alert alert-danger rounded-4 shadow-sm text-center py-5" style="border: none; background-color: #fee2e2; color: #991b1b;">
+            <i class="bi bi-exclamation-triangle fs-2 mb-3 d-block"></i>
+            <h5 class="fw-bold mb-1">Book Not Found</h5>
+            <p class="mb-0 small text-danger">The requested book could not be found or has been removed from our catalog.</p>
         </div>
     <% } %>
 </div>
-<!-- Styles -->
-<style>
-    .classy-card {
-        border-radius: 1rem;
-        background: linear-gradient(135deg, #f9f9f9, #ffffff);
-        box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-        transition: transform 0.2s ease;
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-    }
-    .classy-btn {
-        transition: all 0.2s ease;
-    }
-    .classy-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .fade-in-card {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: all 0.6s ease;
-    }
-    .fade-in-card.visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
-</style>
 
-<!-- Fade-in Animation Script -->
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const cards = document.querySelectorAll(".fade-in-card");
@@ -116,7 +103,7 @@
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.2 });
+        }, { threshold: 0.05 });
         cards.forEach(card => observer.observe(card));
     });
 </script>

@@ -273,7 +273,7 @@ router.post('/forgot-password', async (req, res) => {
 
     try {
         await transporter.sendMail({
-            from: `"KBooks Support" <${process.env.EMAIL_USER}>`,
+            from: `"Folio Support" <${process.env.EMAIL_USER}>`,
             to: user.email,
             subject: 'Password Reset Request',
             html: `

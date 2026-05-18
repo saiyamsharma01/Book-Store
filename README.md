@@ -1,54 +1,76 @@
-# 📚 BookStore Management System
+# 📖 Folio — Premium Editorial Bookstore Management System
 
-A comprehensive, full-stack Bookstore Management System built with **Node.js**, **Express**, and **MySQL**. This application provides a complete e-commerce experience for buying books, featuring a robust admin panel, secure payment integration, and a sleek user interface.
-
-## 🚀 Key Features
-
-### 👤 User Features
-- **Modern UI:** Clean and responsive design using Bootstrap and custom CSS.
-- **Authentication:** Secure signup, login, and profile management using `bcrypt` for password hashing.
-- **Shop & Search:** Browse books by category, search functionality, and slug-based SEO-friendly URLs.
-- **Shopping Cart:** Add/remove items, manage quantities, and real-time total calculation.
-- **Wishlist:** Save your favorite books for later.
-- **Secure Payments:** Integrated with **Razorpay** for seamless transactions.
-- **Order History:** View past orders and track their status.
-- **Contact & Support:** Built-in contact form for user inquiries.
-- **Email Notifications:** Automatic emails via `nodemailer` for order confirmations and support.
-
-### 🛠️ Admin Features (Dashboard)
-- **Inventory Management:** Full CRUD operations for books (Add, Edit, Delete).
-- **Category Management:** Organize books into logical categories.
-- **Order Tracking:** View and manage all user orders.
-- **File Management:** Upload book covers and media using `multer`.
-- **User Management:** Monitor registered users.
+<div align="center">
+  <img src="https://img.shields.io/badge/Brand-Folio-c2410c?style=for-the-badge" alt="Brand Badge" />
+  <img src="https://img.shields.io/badge/Platform-Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js Badge" />
+  <img src="https://img.shields.io/badge/Framework-Express-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express Badge" />
+  <img src="https://img.shields.io/badge/Theme-3--Mode%20Engine-eab308?style=for-the-badge" alt="Theme Switcher Badge" />
+</div>
 
 ---
 
-## 💻 Tech Stack
-
-- **Backend:** Node.js, Express.js
-- **Database:** MySQL
-- **View Engine:** EJS (Embedded JavaScript) with EJS Layouts
-- **Styling:** Bootstrap 5, Vanilla CSS
-- **Authentication:** express-session, bcrypt
-- **Payments:** Razorpay API
-- **File Uploads:** Multer
-- **Emailing:** Nodemailer
+**Folio** is a high-end, luxurious full-stack e-commerce and bookstore management platform designed with an editorial, premium, and human-made aesthetic. Built on a powerful **Node.js** and **Express** core, Folio goes beyond a simple shopping cart, offering an immersive, interactive study-lounge experience complete with a multi-mode typography/color system, real-time particle simulations, and a relaxing offline lofi soundtrack controller.
 
 ---
 
-## 🛠️ Installation & Setup
+## 🌟 The Folio Experience (Visual Highlights)
 
-Follow these steps to get the project running locally:
+### 🎭 1. 3-Mode persistent Theme Engine
+Folio features a highly sophisticated, screen-flash-prevented preloaded theme engine (`localStorage` integrated in the page `<head>`) that allows readers to match their reading ambient preference:
+*   📜 **Custom Literary Cream (Default)**: A rich, beautiful warm-ivory paper background (`#FAF9F5`) paired with soft terracotta accents and deep charcoal typography for a premium, classical editorial vibe.
+*   🌃 **Nocturnal Dark Mode**: A deep, high-contrast dark space blue-black background (`#0b0f19`) featuring glowing amber orange highlights (`#f97316`) and ice-blue metadata for comfortable midnight reading.
+*   ☀️ **Editorial Light Mode**: A clean, high-contrast flat layout with a pure white background (`#ffffff`), sleek steel-blue accents, and sharp typography.
+
+### 🌌 2. Interactive Audio-Visual Hero Banner
+*   ✨ **Theme-Aware Canvas Sparks**: An optimized **HTML5 Canvas particle simulation** is rendered in the homepage hero background. Over 35 glowing firefly particles float and fade at 60fps. The particle colors dynamically morph using a JavaScript `MutationObserver` to perfectly match the active visual theme (Warm Ember in Cream, Radiant Neon-Amber in Dark, and Ice-Blue in Light Mode).
+*   🎵 **Cozy Bookstore Lofi Loop**: A high-fidelity, highly compressed offline **Lofi-Chill Hop track (`Psychosoma-Home`)** is embedded locally. Readers can toggle the sound using a glassmorphic floating controller, featuring a pulsing multi-bar equalizer wave visualizer and micro-animated play/pause states.
+
+### 🔐 3. Aesthetic Auth & Shop Portals
+*   **Adaptable Cards**: Both the **Login & Signup** cards feature elegant matching border treatments, sienna book badges, and dynamic focus borders that automatically adapt to light, dark, and cream palettes.
+*   **Modern Showcase**: The latest arrivals section features high-aspect-ratio hardcover aspect ratios, hover elevations, and graceful entry animations.
+
+---
+
+## 🚀 Core Features
+
+### 👤 Reader/User Features
+*   🛒 **Smart Shopping Cart**: Real-time quantity updates, subtotals, and checkout validations.
+*   ❤️ **Persisted Wishlist**: Save favorite books and manage items effortlessly.
+*   💳 **Secure Payments**: Fully integrated with the **Razorpay API** for seamless mock and production transactions.
+*   📦 **Order Tracking**: Keep tabs on previous purchases with automatic order status logs.
+*   ✉️ **Support Desk**: Elegant contact and feedback forms with real-time **Nodemailer** integration for support handles.
+
+### 🛠️ Admin Dashboard (Command Center)
+*   📚 **Inventory CRUD**: Complete management (Create, Read, Update, Delete) of books, including file uploads via **Multer** for high-resolution book covers.
+*   🏷️ **Category Management**: Group and organize books dynamically.
+*   📋 **Order Master Control**: View, process, and update shipping details for customer orders globally.
+*   👥 **User Auditing**: Monitor registered customer profiles.
+
+---
+
+## 💻 Technical Architecture
+
+*   **Backend Core**: Node.js & Express.js
+*   **Database**: Robust MySQL / Emulated SQLite wrapper
+*   **View Engine**: Modular EJS (Embedded JavaScript) with preloader EJS layouts
+*   **Styling & Design System**: Modern Custom HSL CSS variables, Bootstrap 5 overrides, dynamic transitions, and Outfit/Cormorant Garamond Google Fonts
+*   **Authentication**: Express-Session & Cryptographic Bcrypt hashing
+*   **Asset Management**: Multer (Cover uploads)
+*   **Transactional Mailing**: Nodemailer
+
+---
+
+## 🛠️ Quick Installation & Setup
+
+Follow these simple steps to run the Folio server locally:
 
 ### 1. Prerequisites
-- [Node.js](https://nodejs.org/) (v14 or higher)
-- [MySQL](https://www.mysql.com/)
-- [Razorpay Account](https://razorpay.com/) (For API keys)
+*   [Node.js](https://nodejs.org/) (v16.x or higher recommended)
+*   [MySQL Server](https://www.mysql.com/) (Optional: codebase also contains database emulation utilities)
 
 ### 2. Clone the Repository
 ```bash
-git clone <repository-url>
+git clone <your-repository-url>
 cd Bookstore
 ```
 
@@ -57,72 +79,78 @@ cd Bookstore
 npm install
 ```
 
-### 4. Database Configuration
-1. Login to your MySQL server.
-2. Create a new database: `CREATE DATABASE bookstore;`
-3. Import the schema found in `sql/schema.sql` or use the latest dump in the `dumps/` directory:
-   ```bash
-   mysql -u root -p bookstore < sql/schema.sql
-   ```
+### 4. Database Initialization
+1.  Log in to your MySQL terminal or client.
+2.  Create a fresh database:
+    ```sql
+    CREATE DATABASE bookstore;
+    ```
+3.  Import the structure schema from the SQL dump file:
+    ```bash
+    mysql -u root -p bookstore < sql/schema.sql
+    ```
 
-### 5. Environment Variables
-Create a `.env` file in the root directory (refer to the existing structure):
+### 5. Setup Environment Variables
+Create a file named `.env` in the root folder and add the following keys:
 ```env
 PORT=4000
 DB_HOST=localhost
 DB_USER=your_mysql_username
 DB_PASSWORD=your_mysql_password
 DB_NAME=bookstore
-SESSION_SECRET=your_random_secret
+SESSION_SECRET=your_super_secure_session_secret
 
-# Email Config (Nodemailer)
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASS=your_app_password
+# Nodemailer Config
+EMAIL_USER=support@folio.com
+EMAIL_PASS=your_nodemailer_app_password
 
-# Razorpay Config
-RAZORPAY_KEY_ID=your_razorpay_key
-RAZORPAY_SECRET=your_razorpay_secret
+# Razorpay Config (Keys obtained from Razorpay Dashboard)
+RAZORPAY_KEY_ID=your_razorpay_key_id
+RAZORPAY_SECRET=your_razorpay_key_secret
 
-# Admin Access
-ADMIN_EMAIL=your_email@gmail.com
-ADMIN_EMAIL_PASS=your_app_password
+# Default Admin Configuration
+ADMIN_EMAIL=admin@store.com
+ADMIN_EMAIL_PASS=admin123
 ```
 
-### 6. Run the Application
-Start the server in development mode:
+### 6. Launch the Server
+Start the development server with live-reloads powered by Nodemon:
 ```bash
 npm run dev
 ```
-The application will be accessible at `http://localhost:4000`.
+Open **[http://localhost:4000](http://localhost:4000)** in your browser and enjoy the ultimate cozy bookstore experience!
 
 ---
 
-## 📁 Project Structure
+## 🔒 Default Admin Credentials (For Testing)
+To access the Admin Command Center immediately without setting up new users, log in with:
+*   **Email**: `admin@store.com`
+*   **Password**: `admin123`
+
+---
+
+## 📁 Repository Blueprint
 
 ```text
-├── app.js            # Main entry point
-├── routes/           # Express route handlers
-├── views/            # EJS templates (layout, shop, admin, auth, errors)
-├── public/           # Static assets (CSS, JS, Images, Uploads)
-├── models/           # Database interaction logic
-├── middleware/       # Custom middleware (auth, flash, etc.)
-├── config/           # DB connection config
-├── sql/              # Database schema files
-└── .env              # Environment variables
+├── app.js            # Express application bootstrapper & middlewares
+├── config/           # Database pools and configuration engines
+├── middleware/       # Route guards, flash alerts, and CORS controllers
+├── models/           # SQL query models and schema interactions
+├── public/           # Static Client Assets
+│   ├── css/          # Premium 3-theme design stylesheets (style.css)
+│   ├── js/           # Dynamic scripts (theme managers, cart updates)
+│   ├── sounds/       # High-fidelity local loops (bookstore.mp3)
+│   └── uploads/      # Uploaded hardcover book images
+├── routes/           # RESTful API and template route directories
+├── sql/              # Table schemas and structural setup files
+└── views/            # Templating layout modules (EJS views)
 ```
 
 ---
 
-## 🔒 Security Features
-- **Password Hashing:** Uses `bcrypt` with salt rounds.
-- **Session Security:** Managed with `express-session` and `helmet` for HTTP headers.
-- **Error Handling:** Centralized middleware for catching 404 and 500 errors.
-- **Input Sanitization:** URL encoding and JSON parsing middleware.
+## 📜 Attribution & Licenses
+*   **lofi Audio Track**: Provided by Psychosoma (`Psychosoma-Home`), licensed under standard royalty-free public domain terms.
+*   **Theme Switcher Script**: Developed with native JavaScript.
+*   **Visual Assets**: High-resolution book visual vectors licensed under Creative Commons.
 
----
-
-## 🤝 Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📄 License
-This project is for educational purposes. Feel free to use and modify it.
+Enjoy reading in our cozy bookstore! ☕📖✨

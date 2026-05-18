@@ -1,45 +1,54 @@
-<div class="row justify-content-center py-5">
-    <div class="col-md-5">
-        <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
-            <div class="bg-primary p-5 text-center text-white">
-                <i class="bi bi-pencil-square display-4 mb-3"></i>
-                <h2 class="fw-bold mb-0">Join the Community</h2>
-                <p class="mb-0 opacity-75">Your reading journey starts here</p>
-            </div>
-            <div class="card-body p-5">
-                <form action="/auth/signup" method="POST">
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold text-muted">Full Name</label>
-                        <div class="input-group bg-light rounded-pill px-3 py-1">
-                            <span class="input-group-text bg-transparent border-0"><i class="bi bi-person text-primary"></i></span>
-                            <input type="text" name="name" class="form-control bg-transparent border-0 shadow-none" placeholder="John Doe" required>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold text-muted">Email Address</label>
-                        <div class="input-group bg-light rounded-pill px-3 py-1">
-                            <span class="input-group-text bg-transparent border-0"><i class="bi bi-envelope text-primary"></i></span>
-                            <input type="email" name="email" class="form-control bg-transparent border-0 shadow-none" placeholder="name@example.com" required>
-                        </div>
-                    </div>
-                    
-                    <div class="mb-4">
-                        <label class="form-label fw-semibold text-muted">Password</label>
-                        <div class="input-group bg-light rounded-pill px-3 py-1">
-                            <span class="input-group-text bg-transparent border-0"><i class="bi bi-lock text-primary"></i></span>
-                            <input type="password" name="password" class="form-control bg-transparent border-0 shadow-none" placeholder="••••••••" required>
-                        </div>
-                    </div>
-
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary rounded-pill py-3 fw-bold">Create Account</button>
-                    </div>
-                </form>
-
-                <div class="text-center mt-5">
-                    <p class="text-muted mb-0">Already a member? <a href="/auth/login" class="fw-bold text-decoration-none">Sign In</a></p>
+<div class="row justify-content-center align-items-center py-5" style="min-height: 75vh;">
+    <div class="col-lg-5 col-md-7 col-sm-10">
+        <!-- Main Signup Card -->
+        <div class="card border-0 classy-card shadow-lg p-4 p-md-5 fade-in-card visible">
+            <!-- Header Text -->
+            <div class="text-center mb-5">
+                <div class="d-inline-flex align-items-center justify-content-center bg-light rounded-circle mb-3" 
+                     style="width: 70px; height: 70px; background-color: var(--accent-light) !important;">
+                    <i class="bi bi-pencil-square text-primary fs-2" style="color: var(--accent) !important;"></i>
                 </div>
+                <h2 class="fw-bold mb-2 brand-font" style="font-size: 2.25rem; letter-spacing: -0.02em;">Join the Folio Society</h2>
+                <p class="text-muted small px-3" style="font-size: 0.9rem;">Create your personalized account to unlock cart additions, custom wishlists, and order histories.</p>
+            </div>
+
+            <!-- Form -->
+            <form action="/auth/signup" method="POST" class="m-0">
+                <div class="mb-4">
+                    <label class="form-label fw-semibold small text-muted" style="font-family: 'Plus Jakarta Sans', sans-serif;">Full Name</label>
+                    <div class="input-group rounded-pill px-3 py-1" style="background-color: var(--bg-paper); border: 1.5px solid var(--border-color);">
+                        <span class="input-group-text bg-transparent border-0"><i class="bi bi-person text-secondary" style="color: var(--accent) !important;"></i></span>
+                        <input type="text" name="name" class="form-control bg-transparent border-0 shadow-none text-dark" placeholder="John Doe" required style="font-size: 0.9rem; color: var(--text-main) !important;">
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold small text-muted" style="font-family: 'Plus Jakarta Sans', sans-serif;">Email Address</label>
+                    <div class="input-group rounded-pill px-3 py-1" style="background-color: var(--bg-paper); border: 1.5px solid var(--border-color);">
+                        <span class="input-group-text bg-transparent border-0"><i class="bi bi-envelope text-secondary" style="color: var(--accent) !important;"></i></span>
+                        <input type="email" name="email" class="form-control bg-transparent border-0 shadow-none text-dark" placeholder="name@example.com" required style="font-size: 0.9rem; color: var(--text-main) !important;">
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label fw-semibold small text-muted" style="font-family: 'Plus Jakarta Sans', sans-serif;">Password</label>
+                    <div class="input-group rounded-pill px-3 py-1" style="background-color: var(--bg-paper); border: 1.5px solid var(--border-color);">
+                        <span class="input-group-text bg-transparent border-0"><i class="bi bi-lock text-secondary" style="color: var(--accent) !important;"></i></span>
+                        <input type="password" name="password" class="form-control bg-transparent border-0 shadow-none text-dark" placeholder="••••••••" required style="font-size: 0.9rem; color: var(--text-main) !important;">
+                    </div>
+                </div>
+
+                <div class="d-grid pt-2">
+                    <button type="submit" class="btn btn-premium btn-premium-accent py-3 rounded-pill fw-bold">Create Account</button>
+                </div>
+            </form>
+
+            <!-- Card Footer Switch Link -->
+            <div class="text-center mt-5 pt-3 border-top border-1" style="border-color: var(--border-color) !important;">
+                <p class="text-muted mb-0 small">
+                    Already a member? 
+                    <a href="/auth/login" class="fw-bold text-decoration-none ms-1" style="color: var(--accent);">Sign In</a>
+                </p>
             </div>
         </div>
     </div>
