@@ -1,5 +1,4 @@
-import sqlite3 from 'sqlite3';
-import { open } from 'sqlite';
+import Database from 'better-sqlite3';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
@@ -27,17 +26,13 @@ if (process.env.VERCEL) {
 
 let db = null;
 
-async function getDB() {
+function getDB() {
     if (!db) {
-        db = await open({
-            filename: dbPath,
-            driver: sqlite3.Database
-        });
-        
-        await db.exec('PRAGMA foreign_keys = ON;');
-        
+        db = new Database(dbPath);
+        db.pragma('foreign_keys = ON');
+
         // Final Comprehensive Schema for SQLite
-        await db.exec(`
+        db.exec(`
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
@@ -154,8 +149,8 @@ async function getDB() {
 }
 
 const queryWrapper = async (sql, params = []) => {
-    const database = await getDB();
-    
+    const database = getDB();
+
     // Replace MySQL specific functions and syntax
     let processedSql = sql.replace(/NOW\(\)/gi, 'CURRENT_TIMESTAMP')
                           .replace(/GREATEST\(/gi, 'MAX(')
@@ -164,25 +159,30 @@ const queryWrapper = async (sql, params = []) => {
     // Convert ON DUPLICATE KEY UPDATE to SQLite ON CONFLICT
     if (processedSql.includes('ON DUPLICATE KEY UPDATE')) {
         if (processedSql.match(/cart/i)) {
-            processedSql = processedSql.replace(/ON DUPLICATE KEY UPDATE quantity = quantity \+ 1/gi, 
+            processedSql = processedSql.replace(/ON DUPLICATE KEY UPDATE quantity = quantity \+ 1/gi,
                 'ON CONFLICT(user_id, book_id) DO UPDATE SET quantity = quantity + 1');
         } else if (processedSql.match(/wishlist/i)) {
-            processedSql = processedSql.replace(/ON DUPLICATE KEY UPDATE created_at = CURRENT_TIMESTAMP/gi, 
+            processedSql = processedSql.replace(/ON DUPLICATE KEY UPDATE created_at = CURRENT_TIMESTAMP/gi,
                 'ON CONFLICT(user_id, book_id) DO UPDATE SET created_at = CURRENT_TIMESTAMP');
         }
     }
-    
+
     const trimmedSql = processedSql.trim().toLowerCase();
-    
-    if (trimmedSql.startsWith('select') || trimmedSql.startsWith('show') || trimmedSql.startsWith('describe')) {
-        const rows = await database.all(processedSql, params);
-        return [rows, null];
-    } else {
-        const result = await database.run(processedSql, params);
-        return [{
-            insertId: result.lastID,
-            affectedRows: result.changes
-        }, null];
+
+    try {
+        if (trimmedSql.startsWith('select') || trimmedSql.startsWith('show') || trimmedSql.startsWith('describe')) {
+            const rows = database.prepare(processedSql).all(...params);
+            return [rows, null];
+        } else {
+            const result = database.prepare(processedSql).run(...params);
+            return [{
+                insertId: result.lastInsertRowid,
+                affectedRows: result.changes
+            }, null];
+        }
+    } catch (err) {
+        console.error('DB Query Error:', err.message, '\nSQL:', processedSql);
+        throw err;
     }
 };
 
@@ -193,10 +193,10 @@ export const pool = {
         return {
             query: queryWrapper,
             execute: queryWrapper,
-            beginTransaction: async () => (await getDB()).exec('BEGIN TRANSACTION'),
-            commit: async () => (await getDB()).exec('COMMIT'),
-            rollback: async () => (await getDB()).exec('ROLLBACK'),
-            release: () => {} 
+            beginTransaction: async () => getDB().exec('BEGIN TRANSACTION'),
+            commit: async () => getDB().exec('COMMIT'),
+            rollback: async () => getDB().exec('ROLLBACK'),
+            release: () => {}
         };
     }
 };
