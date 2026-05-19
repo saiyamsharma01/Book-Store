@@ -45,7 +45,7 @@
 
         <div class="row g-4">
             <% books.slice(0, 4).forEach((b, index) => { %>
-                <div class="col-lg-3 col-md-4 col-sm-6 fade-in-card">
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 fade-in-card">
                     <div class="card h-100 classy-card">
                         <!-- Book Cover Image -->
                         <div class="card-img-wrapper">
@@ -200,7 +200,7 @@
         }
 
         // Generate Particles List
-        const sparkCount = 35;
+        const sparkCount = window.innerWidth < 480 ? 15 : 35;
         const sparks = [];
         for (let i = 0; i < sparkCount; i++) {
             sparks.push(new Spark());
