@@ -1,6 +1,5 @@
 node_modules/
 .env
-database.sqlite
 .idea/
 *.log
 public/uploads/
