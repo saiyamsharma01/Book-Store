@@ -12,7 +12,12 @@ if (process.env.VERCEL) {
     const tempDbPath = path.join('/tmp', 'database.sqlite');
     if (!fs.existsSync(tempDbPath)) {
         try {
-            fs.copyFileSync(dbPath, tempDbPath);
+            if (fs.existsSync(dbPath)) {
+                fs.copyFileSync(dbPath, tempDbPath);
+                console.log('Successfully copied SQLite database to /tmp');
+            } else {
+                console.warn('Source database file not found at:', dbPath, '. A fresh database will be created in /tmp.');
+            }
         } catch (err) {
             console.error('Failed to copy database to /tmp:', err);
         }

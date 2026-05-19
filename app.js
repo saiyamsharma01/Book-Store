@@ -6,6 +6,10 @@ dotenv.config();
 import session from 'express-session';
 import methodOverride from 'method-override';
 import flash from 'connect-flash';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Routes
 import authRoutes from './routes/authRoutes.js';
@@ -22,14 +26,14 @@ import { badgeCounts, errorHandler, flashMessages } from './middleware/index.js'
 const app = express();
 
 // -------------------- Static Files --------------------
-app.use(express.static(path.join(process.cwd(), 'public')));
-app.use('/uploads', express.static(path.join(process.cwd(), 'public/uploads')));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 // -------------------- View Engine --------------------
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
 app.set('layout', 'layouts/main');
-app.set('views', path.join(process.cwd(), 'views'));
+app.set('views', path.join(__dirname, 'views'));
 
 // -------------------- Core Middleware --------------------
 app.use(express.urlencoded({ extended: true }));
