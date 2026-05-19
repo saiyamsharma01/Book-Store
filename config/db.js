@@ -2,9 +2,23 @@ import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const dbPath = path.resolve(__dirname, '../database.sqlite');
+let dbPath = path.resolve(__dirname, '../database.sqlite');
+
+// For Vercel/Serverless: Copy database to /tmp so that it is writable
+if (process.env.VERCEL) {
+    const tempDbPath = path.join('/tmp', 'database.sqlite');
+    if (!fs.existsSync(tempDbPath)) {
+        try {
+            fs.copyFileSync(dbPath, tempDbPath);
+        } catch (err) {
+            console.error('Failed to copy database to /tmp:', err);
+        }
+    }
+    dbPath = tempDbPath;
+}
 
 let db = null;
 
