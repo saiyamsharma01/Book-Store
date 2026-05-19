@@ -1,15 +1,27 @@
 import express from 'express';
 import multer from 'multer';
 import slugify from 'slugify';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 import { requireAuth } from '../middleware/auth.js';
 import { requireAdmin } from '../middleware/role.js';
 import { getAllBooks, getBookById, createBook, updateBook, deleteBook } from '../models/bookModel.js';
 import { getAllCategories, deleteCategory, getCategoryStats } from '../models/categoryModel.js';
 import pool from '../config/db.js';
-import db from '../config/db.js';   // adjust path to your db.js file
+import db from '../config/db.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const router = express.Router();
-const upload = multer({ dest: 'public/uploads/books/' });
+
+// Use /tmp on Vercel (read-only filesystem), otherwise use public/uploads/books
+const bookUploadDir = process.env.VERCEL
+    ? '/tmp/uploads/books'
+    : path.join(__dirname, '../public/uploads/books');
+if (!fs.existsSync(bookUploadDir)) fs.mkdirSync(bookUploadDir, { recursive: true });
+
+const upload = multer({ dest: bookUploadDir });
 
 // Protect all admin routes
 router.use(requireAuth, requireAdmin);

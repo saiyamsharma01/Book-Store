@@ -3,6 +3,9 @@ import pool from '../config/db.js';
 import { findByEmail, createUser, updateUser } from '../models/userModel.js';
 import multer from 'multer';
 import nodemailer from 'nodemailer';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Create reusable transporter
 const transporter = nodemailer.createTransport({
@@ -12,8 +15,16 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASS  // app password (not your real Gmail password!)
     }
 });
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// Use /tmp on Vercel (read-only filesystem), otherwise use public/uploads
+const avatarUploadDir = process.env.VERCEL
+    ? '/tmp/uploads'
+    : path.join(__dirname, '../public/uploads');
+if (!fs.existsSync(avatarUploadDir)) fs.mkdirSync(avatarUploadDir, { recursive: true });
+
 const storage = multer.diskStorage({
-    destination: 'public/uploads',
+    destination: avatarUploadDir,
     filename: (req, file, cb) => {
         if (!req.session.user) return cb(new Error('Not logged in'));
         const ext = file.originalname.split('.').pop();
